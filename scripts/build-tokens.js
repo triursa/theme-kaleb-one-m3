@@ -45,6 +45,7 @@ function buildUtilityCSS() {
 
   css += `/* === Elevation === */\n:root {\n`;
   for (const [k, v] of Object.entries(elevation)) {
+    if (k === 'darkOverlays') continue; // handled separately in palette CSS
     css += `  --${k}: ${v};\n`;
   }
   css += `}\n\n`;

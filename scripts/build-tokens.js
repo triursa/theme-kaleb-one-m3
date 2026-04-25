@@ -154,8 +154,18 @@ for (const [key, palette] of Object.entries(palettes)) {
 fs.writeFileSync(path.join(distDir, 'tokens.json'), JSON.stringify(tokens, null, 2));
 console.log('  ✓ dist/tokens.json');
 
+// Copy component CSS into dist (for CDN consumption by apps)
+const componentsSrc = path.join(__dirname, '..', 'src', 'components', 'components.css');
+if (fs.existsSync(componentsSrc)) {
+  fs.copyFileSync(componentsSrc, path.join(distDir, 'components.css'));
+  console.log('  ✓ dist/components.css');
+}
+
 // Copy all CSS into showcase dir for the preview site
 fs.mkdirSync(path.join(showcaseDir, 'css'), { recursive: true });
 fs.copyFileSync(path.join(distDir, 'theme-all.css'), path.join(showcaseDir, 'css', 'theme-all.css'));
+if (fs.existsSync(componentsSrc)) {
+  fs.copyFileSync(componentsSrc, path.join(showcaseDir, 'css', 'components.css'));
+}
 
 console.log('\nBuild complete.');

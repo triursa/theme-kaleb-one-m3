@@ -1,4 +1,4 @@
-// Build script — generates CSS custom properties + JSON tokens from source definitions
+// Build script — generates CSS custom properties + JSON tokens + Tailwind preset from source definitions
 const fs = require('fs');
 const path = require('path');
 
@@ -117,6 +117,119 @@ function buildAllPalettesCSS() {
   return css;
 }
 
+// Build Tailwind preset JS — auto-generated from tokens.json
+function buildTailwindPreset(tokens) {
+  const obsidian = tokens.palettes.obsidian.roles;
+
+  // Map color roles: drop 'md-sys-color-' prefix for cleaner Tailwind names
+  const colorRoles = Object.entries(obsidian).map(([k, v]) => [
+    k.replace('md-sys-color-', ''),
+    v
+  ]);
+
+  // Split kebab-case into tailwind-style nested object
+  function nestColorPairs(pairs) {
+    const result = {};
+    for (const [key, value] of pairs) {
+      const parts = key.split('-');
+      let current = result;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) current[parts[i]] = {};
+        current = current[parts[i]];
+      }
+      current[parts[parts.length - 1]] = value;
+    }
+    return result;
+  }
+
+  const m3Colors = {};
+  for (const [key, value] of colorRoles) {
+    m3Colors[key] = value;
+  }
+
+  const spacingMap = Object.fromEntries(
+    Object.entries(tokens.spacing).map(([k, v]) => [
+      k.replace('md-sys-spacing-', 'm3-'),
+      v
+    ])
+  );
+
+  const radiusMap = Object.fromEntries(
+    Object.entries(tokens.shape).map(([k, v]) => [
+      k.replace('md-sys-shape-corner-', 'm3-'),
+      v
+    ])
+  );
+
+  const shadowMap = Object.fromEntries(
+    Object.entries(tokens.elevation)
+      .filter(([k]) => k !== 'darkOverlays')
+      .map(([k, v]) => [
+        k.replace('md-sys-elevation-', 'm3-'),
+        v
+      ])
+  );
+
+  const durationMap = Object.fromEntries(
+    Object.entries(tokens.motion.duration).map(([k, v]) => [
+      k.replace('md-sys-motion-duration-', 'm3-'),
+      v
+    ])
+  );
+
+  const easingMap = Object.fromEntries(
+    Object.entries(tokens.motion.easing).map(([k, v]) => [
+      k.replace('md-sys-motion-easing-', 'm3-'),
+      v
+    ])
+  );
+
+  const js = `/**
+ * @kaleb-one/theme — Tailwind CSS preset (auto-generated)
+ *
+ * Maps M3 Obsidian design tokens to Tailwind configuration.
+ * Extends colors, spacing, borderRadius, boxShadow, and fontFamily
+ * from the canonical theme tokens.
+ *
+ * Usage (Tailwind v3):
+ *   // tailwind.config.js
+ *   module.exports = {
+ *     presets: [require('@kaleb-one/theme/tailwind')],
+ *   }
+ *
+ * Usage (Tailwind v4, CSS-first):
+ *   @import "@kaleb-one/theme/css/obsidian";
+ *   // Tokens available as CSS custom properties, use via arbitrary values:
+ *   // bg-[var(--md-sys-color-surface)]
+ *   // text-[var(--md-sys-color-on-surface)]
+ */
+
+const tokens = require('./tokens.json');
+const obsidian = tokens.palettes.obsidian.roles;
+
+module.exports = {
+  theme: {
+    extend: {
+      colors: { m3: ${JSON.stringify(m3Colors, null, 8)} },
+      spacing: ${JSON.stringify(spacingMap, null, 6)},
+      borderRadius: ${JSON.stringify(radiusMap, null, 6)},
+      boxShadow: ${JSON.stringify(shadowMap, null, 6)},
+      fontFamily: ${JSON.stringify({
+        display: [tokens.typography.fontFamily.display],
+        body: [tokens.typography.fontFamily.body],
+        mono: [tokens.typography.fontFamily.mono],
+      }, null, 6)},
+      transitionDuration: ${JSON.stringify(durationMap, null, 6)},
+      transitionTimingFunction: ${JSON.stringify(easingMap, null, 6)},
+    },
+  },
+};
+`;
+  return js;
+}
+
+// --- Build all outputs ---
+
 // Build individual palette CSS files
 for (const key of Object.keys(palettes)) {
   const slug = key.replace(/([A-Z])/g, '-$1').toLowerCase();
@@ -161,6 +274,11 @@ if (fs.existsSync(componentsSrc)) {
   fs.copyFileSync(componentsSrc, path.join(distDir, 'components.css'));
   console.log('  ✓ dist/components.css');
 }
+
+// Generate Tailwind preset from tokens
+const tailwindPresetJS = buildTailwindPreset(tokens);
+fs.writeFileSync(path.join(distDir, 'tailwind-preset.js'), tailwindPresetJS);
+console.log('  ✓ dist/tailwind-preset.js');
 
 // Copy all CSS into showcase dir for the preview site
 fs.mkdirSync(path.join(showcaseDir, 'css'), { recursive: true });

@@ -100,7 +100,6 @@
   --md-sys-elevation-3: 0 4px 12px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.14);
   --md-sys-elevation-4: 0 6px 18px rgba(0,0,0,0.12), 0 8px 10px rgba(0,0,0,0.14);
   --md-sys-elevation-5: 0 10px 24px rgba(0,0,0,0.12), 0 12px 14px rgba(0,0,0,0.14);
-  --darkOverlays: [object Object];
 }
 
 /* === Shape === */

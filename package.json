@@ -1,15 +1,52 @@
 {
-  "name": "theme-kaleb-one",
+  "name": "@kaleb-one/theme",
   "version": "0.1.0",
-  "description": "Shared Material Design 3 theme package for kaleb.one ecosystem",
+  "description": "Shared Material Design 3 theme package for the kaleb.one ecosystem — Obsidian, Midnight Ocean, Volcanic, and Frost palettes",
+  "keywords": [
+    "material-design-3",
+    "m3",
+    "design-tokens",
+    "css-custom-properties",
+    "tailwind-preset",
+    "kaleb-one",
+    "obsidian"
+  ],
+  "license": "MIT",
+  "author": "Triursa",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triursa/theme-kaleb-one.git"
+  },
+  "bugs": {
+    "url": "https://github.com/triursa/theme-kaleb-one/issues"
+  },
+  "homepage": "https://theme.kaleb.one",
+  "main": "dist/tokens.json",
+  "exports": {
+    ".": "./dist/tokens.json",
+    "./css/obsidian": "./dist/theme-obsidian.css",
+    "./css/midnight-ocean": "./dist/theme-midnight-ocean.css",
+    "./css/volcanic": "./dist/theme-volcanic.css",
+    "./css/frost": "./dist/theme-frost.css",
+    "./css/all": "./dist/theme-all.css",
+    "./css/components": "./dist/components.css",
+    "./tailwind": "./dist/tailwind-preset.js"
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "node scripts/build-tokens.js",
     "dev": "python3 -m http.server 8080 -d showcase",
-    "build:site": "node scripts/build-tokens.js && echo 'Showcase built — open showcase/index.html'"
+    "build:site": "node scripts/build-tokens.js && echo 'Showcase built — open showcase/index.html'",
+    "prepublishOnly": "node scripts/build-tokens.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:triursa/theme-kaleb-one.git"
+  "peerDependencies": {
+    "tailwindcss": ">=3.0.0 || >=4.0.0"
   },
-  "license": "MIT"
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  }
 }

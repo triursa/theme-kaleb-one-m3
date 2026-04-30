@@ -127,21 +127,6 @@ function buildTailwindPreset(tokens) {
     v
   ]);
 
-  // Split kebab-case into tailwind-style nested object
-  function nestColorPairs(pairs) {
-    const result = {};
-    for (const [key, value] of pairs) {
-      const parts = key.split('-');
-      let current = result;
-      for (let i = 0; i < parts.length - 1; i++) {
-        if (!current[parts[i]]) current[parts[i]] = {};
-        current = current[parts[i]];
-      }
-      current[parts[parts.length - 1]] = value;
-    }
-    return result;
-  }
-
   const m3Colors = {};
   for (const [key, value] of colorRoles) {
     m3Colors[key] = value;
@@ -203,9 +188,6 @@ function buildTailwindPreset(tokens) {
  *   // bg-[var(--md-sys-color-surface)]
  *   // text-[var(--md-sys-color-on-surface)]
  */
-
-const tokens = require('./tokens.json');
-const obsidian = tokens.palettes.obsidian.roles;
 
 module.exports = {
   theme: {

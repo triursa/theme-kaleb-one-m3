@@ -18,9 +18,6 @@
  *   // text-[var(--md-sys-color-on-surface)]
  */
 
-const tokens = require('./tokens.json');
-const obsidian = tokens.palettes.obsidian.roles;
-
 module.exports = {
   theme: {
     extend: {

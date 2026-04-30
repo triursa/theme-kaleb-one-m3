@@ -17,10 +17,9 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org
 
-      - run: npm ci --ignore-scripts
+      - run: npm install --ignore-scripts
 
-      - run: npm run build
-
+      # prepublishOnly runs build automatically — no explicit build step needed
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

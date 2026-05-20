@@ -64,6 +64,10 @@ theme-kaleb-one/
 <!-- Load a palette -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/triursa/theme-kaleb-one@main/dist/theme-obsidian.css">
 
-<!-- Or import tokens -->
+<!-- Or import via npm -->
 @import 'theme-kaleb-one/dist/tokens';
 ```
+
+## 🤖 For AI Agents
+
+See **[AGENT.md](./AGENT.md)** for a comprehensive design system reference — complete color token tables, typography scale, component recipes, and M3 best practices. If you're an AI agent building UIs with this theme system, start there.

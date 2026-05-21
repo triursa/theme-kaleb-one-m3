@@ -995,6 +995,8 @@ Loading tokens...
 
     function handleInspectClick(e) {
       if (!inspectMode) return;
+      // Don't intercept clicks inside the inspector panel or app bar controls
+      if (e.target.closest('#inspector-panel') || e.target.closest('.app-bar')) return;
       e.preventDefault();
       e.stopPropagation();
       const el = e.target;

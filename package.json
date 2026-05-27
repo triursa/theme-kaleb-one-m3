@@ -15,10 +15,10 @@
   "author": "Triursa",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/triursa/theme-kaleb-one.git"
+    "url": "git+https://github.com/triursa/theme-kaleb-one-m3.git"
   },
   "bugs": {
-    "url": "https://github.com/triursa/theme-kaleb-one/issues"
+    "url": "https://github.com/triursa/theme-kaleb-one-m3/issues"
   },
   "homepage": "https://theme.kaleb.one",
   "main": "dist/tokens.json",

@@ -1,4 +1,4 @@
-# theme-kaleb-one
+# theme-kaleb-one-m3
 
 Shared Material Design 3 theme package for the **kaleb.one ecosystem**.
 

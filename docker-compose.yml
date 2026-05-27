@@ -2,7 +2,7 @@ services:
   theme-sandbox:
     build: .
     # NOTE: Cannot run as non-root — nginx needs to write cache dirs
-    container_name: theme-kaleb-one
+    container_name: theme-kaleb-one-m3
     restart: unless-stopped
     ports:
       - "127.0.0.1:8095:8080"

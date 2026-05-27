@@ -122,7 +122,7 @@ function buildPaletteCSS(paletteKey) {
 
 // Also build a combined "all palettes" CSS
 function buildAllPalettesCSS() {
-  let css = `/*\n * theme-kaleb-one — All Palettes\n * Material Design 3 theme tokens for kaleb.one\n * \n * Usage: Set data-theme on <html> to one of:\n *   "obsidian" | "midnight-ocean" | "volcanic" | "frost"\n */\n\n`;
+  let css = `/*\n * theme-kaleb-one-m3 — All Palettes\n * Material Design 3 theme tokens for kaleb.one\n * \n * Usage: Set data-theme on <html> to one of:\n *   "obsidian" | "midnight-ocean" | "volcanic" | "frost"\n */\n\n`;
   css += buildTypographyCSS();
   css += buildUtilityCSS();
   for (const key of Object.keys(palettes)) {

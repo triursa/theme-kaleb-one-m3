@@ -1,7 +1,7 @@
 # AGENT.md — Theme Design System Reference
 
 > **For AI agents and developers building UIs in the kaleb.one ecosystem.**
-> This document provides everything needed to use `theme-kaleb-one` to create visually consistent Material 3 interfaces.
+> This document provides everything needed to use `theme-kaleb-one-m3` (formerly `theme-kaleb-one`) to create visually consistent Material 3 interfaces.
 
 ## Quick Start
 

@@ -21,17 +21,8 @@
       min-height: 100vh;
     }
 
-    /* === NAV RAIL === */
-    .nav-rail {
-      position: fixed; top: 0; left: 0; width: 80px; height: 100vh;
-      background-color: var(--md-sys-color-surface-container);
-      display: flex; flex-direction: column; align-items: center;
-      padding: var(--md-sys-spacing-3) 0; gap: var(--md-sys-spacing-1);
-      z-index: 100; border-right: 1px solid var(--md-sys-color-outline-variant);
-      overflow-y: auto;
-      scrollbar-width: none;
-    }
-    .nav-rail::-webkit-scrollbar { display: none; }
+    /* === NAV RAIL — hidden on compact, shown from medium+ === */
+    .nav-rail { display: none; }
     .nav-rail-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: var(--md-sys-spacing-2) var(--md-sys-spacing-1);
@@ -40,6 +31,7 @@
       text-decoration: none; cursor: pointer;
       transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
       width: 64px; font-size: var(--md-sys-typescale-label-small-size);
+      min-height: 44px; min-width: 44px;
     }
     .nav-rail-item:hover { background-color: var(--md-sys-color-surface-container-high); }
     .nav-rail-item--active {
@@ -48,14 +40,44 @@
     }
     .nav-rail-icon { font-size: 20px; margin-bottom: 2px; }
 
-    /* === APP BAR === */
+    /* === BOTTOM NAV — visible on compact, hidden from medium+ === */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--md-sys-layout-bar-height, 80px);
+      background-color: var(--md-sys-color-surface-container);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      display: flex; justify-content: space-around; align-items: center;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 100;
+    }
+    .bottom-nav-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 4px 0; min-height: 56px; min-width: 48px;
+      cursor: pointer; text-decoration: none;
+      color: var(--md-sys-color-on-surface-variant);
+      transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+      position: relative; flex: 1;
+    }
+    .bottom-nav-item:hover { color: var(--md-sys-color-on-surface); }
+    .bottom-nav-item--active { color: var(--md-sys-color-on-secondary-container); }
+    .bottom-nav-item--active .bottom-nav-indicator { background-color: var(--md-sys-color-secondary-container); }
+    .bottom-nav-indicator {
+      position: absolute; top: 4px;
+      width: 64px; height: 32px;
+      border-radius: var(--md-sys-shape-corner-full);
+      background-color: transparent;
+    }
+    .bottom-nav-icon { font-size: 24px; margin-bottom: 2px; }
+    .bottom-nav-label { font-size: var(--md-sys-typescale-label-small-size); }
+
+    /* === APP BAR — mobile-first, no left padding on compact === */
     .app-bar {
-      position: fixed; top: 0; left: 0; right: 0; height: 64px;
+      position: fixed; top: 0; left: 0; right: 0;
+      min-height: 56px; height: auto;
       background-color: var(--md-sys-color-surface);
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--md-sys-spacing-6) 0 var(--md-sys-spacing-6);
-      padding-left: 80px;
+      padding: calc(var(--md-sys-spacing-4) + env(safe-area-inset-top, 0px)) var(--md-sys-spacing-4) var(--md-sys-spacing-4) var(--md-sys-spacing-4);
       z-index: 99;
     }
     .app-bar h1 {
@@ -64,8 +86,43 @@
       color: var(--md-sys-color-on-surface);
     }
 
-    /* === PALETTE SWITCHER === */
-    .palette-switcher { display: flex; gap: var(--md-sys-spacing-2); }
+    /* === PALETTE SWITCHER — hidden on compact, shown from medium+ === */
+    .palette-switcher { display: none; }
+    /* === PALETTE DROPDOWN — visible on compact, hidden from medium+ === */
+    .palette-dropdown { position: relative; }
+    .palette-dropdown-trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 12px;
+      border-radius: var(--md-sys-shape-corner-full);
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      cursor: pointer; min-height: 44px;
+      font-family: var(--md-sys-font-family-body);
+      font-size: var(--md-sys-typescale-label-medium-size);
+    }
+    .palette-dropdown-menu {
+      position: absolute; top: 100%; right: 0; margin-top: 4px;
+      background: var(--md-sys-color-surface-container-high);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: var(--md-sys-shape-corner-medium);
+      min-width: 180px; z-index: 210; display: none;
+      box-shadow: var(--md-sys-elevation-2, 0 2px 8px rgba(0,0,0,.3));
+    }
+    .palette-dropdown-menu.open { display: block; }
+    .palette-dropdown-item {
+      display: flex; align-items: center; gap: 8px;
+      width: 100%; padding: 10px 16px;
+      border: none; background: transparent;
+      color: var(--md-sys-color-on-surface); cursor: pointer;
+      font-size: var(--md-sys-typescale-body-medium-size);
+      font-family: var(--md-sys-font-family-body);
+      min-height: 44px;
+    }
+    .palette-dropdown-item:first-child { border-radius: var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium) 0 0; }
+    .palette-dropdown-item:last-child { border-radius: 0 0 var(--md-sys-shape-corner-medium) var(--md-sys-shape-corner-medium); }
+    .palette-dropdown-item:hover { background-color: var(--md-sys-color-surface-container-highest); }
+    .palette-dropdown-item--active { background-color: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
     .palette-btn {
       display: flex; align-items: center; gap: var(--md-sys-spacing-1);
       padding: var(--md-sys-spacing-1) var(--md-sys-spacing-3);
@@ -75,6 +132,7 @@
       cursor: pointer; font-size: var(--md-sys-typescale-label-small-size);
       font-family: var(--md-sys-font-family-body);
       transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
+      min-height: 44px;
     }
     .palette-btn:hover { background-color: var(--md-sys-color-surface-container-high); }
     .palette-btn--active {
@@ -91,9 +149,10 @@
     .palette-swatch-volcanic { background: #1C1A16; border: 1px solid #5F5C57; }
     .palette-swatch-frost { background: #F0F0F8; border: 1px solid #C6C6D0; }
 
-    /* === MAIN CONTENT === */
+    /* === MAIN CONTENT — mobile-first === */
     .main-content {
-      margin-left: 80px; padding: 80px var(--md-sys-spacing-6) var(--md-sys-spacing-8);
+      margin-left: 0;
+      padding: 80px var(--md-sys-spacing-4) calc(var(--md-sys-spacing-8) + 80px + env(safe-area-inset-bottom));
       max-width: 1200px;
     }
     .section { margin-bottom: var(--md-sys-spacing-8); scroll-margin-top: 80px; }
@@ -143,8 +202,8 @@
 
     /* === COMPONENT GRID === */
     .component-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: var(--md-sys-spacing-4);
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--md-sys-spacing-4); overflow-x: auto;
     }
 
     /* === TYPE SHOWCASE === */
@@ -156,27 +215,36 @@
       margin-bottom: var(--md-sys-spacing-1);
     }
 
-    /* === TOKEN INSPECTOR PANEL === */
+    /* === TOKEN INSPECTOR PANEL — bottom sheet on compact, side panel on expanded+ === */
     .inspector-overlay {
-      position: fixed; top: 0; right: 0; bottom: 0; width: 360px;
+      position: fixed; top: auto; bottom: 0; left: 0; right: 0; width: 100%;
+      height: 70vh;
       background-color: var(--md-sys-color-surface-container);
-      border-left: 1px solid var(--md-sys-color-outline-variant);
-      z-index: 200; transform: translateX(100%);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      border-left: none;
+      z-index: 200; transform: translateY(100%);
       transition: transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized);
       display: flex; flex-direction: column;
-      box-shadow: var(--md-sys-elevation-4);
+      border-radius: var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0 0;
+      box-shadow: var(--md-sys-elevation-4, 0 8px 24px rgba(0,0,0,.4));
     }
-    .inspector-overlay.open { transform: translateX(0); }
+    .inspector-overlay.open { transform: translateY(0); }
     .inspector-header {
       display: flex; justify-content: space-between; align-items: center;
       padding: var(--md-sys-spacing-4);
       border-bottom: 1px solid var(--md-sys-color-outline-variant);
     }
+    .inspector-handle {
+      width: 32px; height: 4px;
+      border-radius: 2px;
+      background-color: var(--md-sys-color-outline-variant);
+      margin: var(--md-sys-spacing-2) auto var(--md-sys-spacing-1);
+    }
     .inspector-header h3 {
       font-size: var(--md-sys-typescale-title-medium-size);
       font-weight: var(--md-sys-typescale-title-medium-weight);
     }
-    .inspector-body { flex: 1; overflow-y: auto; padding: var(--md-sys-spacing-4); }
+    .inspector-body { flex: 1; overflow-y: auto; padding: var(--md-sys-spacing-4); -webkit-overflow-scrolling: touch; }
     .inspector-token-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: var(--md-sys-spacing-2) var(--md-sys-spacing-3);
@@ -202,9 +270,9 @@
       border: 1px solid var(--md-sys-color-outline-variant);
     }
 
-    /* === COPY TOAST === */
+    /* === COPY TOAST — safe area aware === */
     .copy-toast {
-      position: fixed; bottom: var(--md-sys-spacing-8); left: 50%; transform: translateX(-50%) translateY(80px);
+      position: fixed; bottom: calc(var(--md-sys-spacing-8) + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(80px);
       background-color: var(--md-sys-color-inverse-surface);
       color: var(--md-sys-color-inverse-on-surface);
       padding: var(--md-sys-spacing-3) var(--md-sys-spacing-5);
@@ -218,7 +286,8 @@
 
     /* === PALETTE COMPARISON === */
     .palette-compare {
-      display: grid; grid-template-columns: 1fr 1fr; gap: var(--md-sys-spacing-4);
+      display: grid; grid-template-columns: 1fr; gap: var(--md-sys-spacing-4);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
     }
     .palette-compare-card {
       border-radius: var(--md-sys-shape-corner-medium);
@@ -233,7 +302,7 @@
       border-radius: var(--md-sys-shape-corner-medium);
       padding: var(--md-sys-spacing-3);
       font-family: var(--md-sys-font-family-mono);
-      font-size: var(--md-sys-typescale-body-small-size);
+      font-size: 14px;
       overflow-x: auto; position: relative;
       color: var(--md-sys-color-on-surface);
     }
@@ -272,7 +341,12 @@
     .color-input-row { display: flex; gap: var(--md-sys-spacing-3); align-items: center; margin-bottom: var(--md-sys-spacing-3); flex-wrap: wrap; }
 
     /* === TABS === */
-    .tab-bar { display: flex; gap: 0; margin-bottom: var(--md-sys-spacing-4); border-bottom: 1px solid var(--md-sys-color-outline-variant); }
+    .tab-bar {
+      display: flex; gap: 0; margin-bottom: var(--md-sys-spacing-4);
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
     .tab-item {
       padding: var(--md-sys-spacing-3) var(--md-sys-spacing-5);
       color: var(--md-sys-color-on-surface-variant);
@@ -282,6 +356,7 @@
       transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
       background: none; border-top: none; border-left: none; border-right: none;
       font-family: var(--md-sys-font-family-body);
+      white-space: nowrap; min-height: 44px;
     }
     .tab-item:hover { background-color: var(--md-sys-color-surface-container-high); }
     .tab-item--active {
@@ -291,24 +366,59 @@
     .tab-panel { display: none; }
     .tab-panel--active { display: block; }
 
-    /* === RESPONSIVE — M3 I/O 2026 Breakpoints === */
-    /* Compact: phone portrait (< 600px) */
-    @media (max-width: 599px) {
-      .nav-rail { display: none; }
-      .app-bar { left: 0; }
-      .main-content { margin-left: 0; padding: 80px var(--md-sys-spacing-4); }
-      .palette-switcher { flex-wrap: wrap; gap: var(--md-sys-spacing-1); }
-      .inspector-overlay { width: 100%; }
+    /* === RESPONSIVE — Mobile-first M3 I/O 2026 Breakpoints === */
+
+    /* MEDIUM+ (≥600px) — restore nav-rail, hide bottom-nav, app-bar left padding, palette-switcher */
+    @media (min-width: 600px) {
+      .nav-rail {
+        display: flex; position: fixed; top: 0; left: 0;
+        width: var(--md-sys-layout-rail-width, 80px); height: 100vh;
+        background-color: var(--md-sys-color-surface-container);
+        flex-direction: column; align-items: center;
+        padding: var(--md-sys-spacing-3) 0; gap: var(--md-sys-spacing-1);
+        border-right: 1px solid var(--md-sys-color-outline-variant);
+        overflow-y: auto; scrollbar-width: none;
+        z-index: 100;
+      }
+      .nav-rail::-webkit-scrollbar { display: none; }
+
+      .bottom-nav { display: none; }
+
+      .app-bar {
+        height: 64px;
+        padding-left: var(--md-sys-layout-rail-width, 80px);
+        padding-right: var(--md-sys-spacing-6);
+      }
+
+      .palette-switcher { display: flex; flex-wrap: wrap; gap: var(--md-sys-spacing-2); }
+      .palette-dropdown { display: none; }
+
+      .main-content {
+        margin-left: var(--md-sys-layout-rail-width, 80px);
+        padding: 80px var(--md-sys-spacing-6) var(--md-sys-spacing-8);
+      }
+
+      .palette-compare { grid-template-columns: 1fr 1fr; }
+
+      .code-block { font-size: var(--md-sys-typescale-body-small-size); }
     }
-    /* Medium: phone landscape / small tablet (600–839px) */
-    @media (min-width: 600px) and (max-width: 839px) {
-      .nav-rail { width: var(--md-sys-layout-rail-width, 80px); }
-      .app-bar { left: var(--md-sys-layout-rail-width, 80px); }
-      .main-content { margin-left: var(--md-sys-layout-rail-width, 80px); }
+
+    /* EXPANDED+ (≥840px) — inspector as side panel */
+    @media (min-width: 840px) {
+      .inspector-overlay {
+        position: fixed; top: 0; right: 0; bottom: 0;
+        width: 360px; height: auto;
+        border-left: 1px solid var(--md-sys-color-outline-variant);
+        border-top: none;
+        border-radius: 0;
+        transform: translateX(100%);
+        box-shadow: var(--md-sys-elevation-4, -4px 0 16px rgba(0,0,0,.3));
+      }
+      .inspector-overlay.open { transform: translateX(0); }
+      .inspector-handle { display: none; }
+
+      .component-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
     }
-    /* Expanded: tablet (840–1199px) — default layout serves this well */
-    /* Large: desktop (1200px+) — default layout, no overrides needed */
-    /* Extra-large: ultra-wide (1600px+) — default layout, no overrides needed */
   </style>
 </head>
 <body>
@@ -345,6 +455,19 @@
       <button id="inspect-toggle" class="palette-btn" title="Toggle token inspector mode">
         🔍 Inspect
       </button>
+      <div class="palette-dropdown" id="palette-dropdown">
+        <button class="palette-dropdown-trigger" id="palette-dropdown-trigger">
+          <span class="palette-swatch palette-swatch-obsidian"></span>
+          <span id="palette-dropdown-label">Obsidian</span>
+          <span>▾</span>
+        </button>
+        <div class="palette-dropdown-menu" id="palette-dropdown-menu">
+          <button class="palette-dropdown-item palette-dropdown-item--active" data-palette="obsidian"><span class="palette-swatch palette-swatch-obsidian"></span> Obsidian</button>
+          <button class="palette-dropdown-item" data-palette="midnight-ocean"><span class="palette-swatch palette-swatch-midnight-ocean"></span> Midnight Ocean</button>
+          <button class="palette-dropdown-item" data-palette="volcanic"><span class="palette-swatch palette-swatch-volcanic"></span> Volcanic</button>
+          <button class="palette-dropdown-item" data-palette="frost"><span class="palette-swatch palette-swatch-frost"></span> Frost</button>
+        </div>
+      </div>
       <div class="palette-switcher">
         <button class="palette-btn palette-btn--active" data-palette="obsidian" onclick="setPalette('obsidian')">
           <span class="palette-swatch palette-swatch-obsidian"></span> Obsidian
@@ -364,6 +487,7 @@
 
   <!-- TOKEN INSPECTOR PANEL -->
   <div class="inspector-overlay" id="inspector-panel">
+    <div class="inspector-handle"></div>
     <div class="inspector-header">
       <h3>Token Inspector</h3>
       <button onclick="closeInspector()" style="background:none;border:none;color:var(--md-sys-color-on-surface-variant);cursor:pointer;font-size:20px;">✕</button>
@@ -1291,6 +1415,16 @@ Loading tokens...
       document.querySelectorAll('.palette-btn[data-palette]').forEach(btn => {
         btn.classList.toggle('palette-btn--active', btn.dataset.palette === name);
       });
+      // Sync palette dropdown
+      document.querySelectorAll('.palette-dropdown-item').forEach(item => {
+        item.classList.toggle('palette-dropdown-item--active', item.dataset.palette === name);
+      });
+      const dropdownLabelEl = document.getElementById('palette-dropdown-label');
+      if (dropdownLabelEl) dropdownLabelEl.textContent = palettes[name].name;
+      // Close dropdown if open
+      const dropdownMenu = document.getElementById('palette-dropdown-menu');
+      if (dropdownMenu) dropdownMenu.classList.remove('open');
+
       const info = palettes[name];
       document.getElementById('active-palette-name').textContent = info.name;
       document.getElementById('active-palette-desc').textContent = info.desc;
@@ -1331,6 +1465,14 @@ Loading tokens...
       item.addEventListener('click', function() {
         document.querySelectorAll('.nav-rail-item').forEach(i => i.classList.remove('nav-rail-item--active'));
         this.classList.add('nav-rail-item--active');
+        // Sync bottom-nav active state
+        const href = this.getAttribute('href');
+        if (href) {
+          const section = href.replace('#', '');
+          document.querySelectorAll('.bottom-nav-item').forEach(i => {
+            i.classList.toggle('bottom-nav-item--active', i.dataset.section === section);
+          });
+        }
       });
     });
 
@@ -1365,7 +1507,106 @@ Loading tokens...
       });
     }
 
+    // === BOTTOM NAV ACTIVE STATE ===
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        e.preventDefault();
+        const section = this.getAttribute('data-section');
+        const target = document.getElementById(section);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+        document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('bottom-nav-item--active'));
+        this.classList.add('bottom-nav-item--active');
+        // Sync nav-rail active state
+        document.querySelectorAll('.nav-rail-item').forEach(i => {
+          i.classList.toggle('nav-rail-item--active', i.getAttribute('href') === '#' + section);
+        });
+      });
+    });
+
+    // === PALETTE DROPDOWN ===
+    const dropdownTrigger = document.getElementById('palette-dropdown-trigger');
+    const dropdownMenu = document.getElementById('palette-dropdown-menu');
+    const dropdownLabel = document.getElementById('palette-dropdown-label');
+
+    if (dropdownTrigger && dropdownMenu) {
+      dropdownTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('open');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.palette-dropdown')) {
+          dropdownMenu.classList.remove('open');
+        }
+      });
+
+      // Palette dropdown items
+      document.querySelectorAll('.palette-dropdown-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const palette = this.dataset.palette;
+          setPalette(palette);
+          // Update active state
+          document.querySelectorAll('.palette-dropdown-item').forEach(i => i.classList.remove('palette-dropdown-item--active'));
+          this.classList.add('palette-dropdown-item--active');
+          // Update label
+          dropdownLabel.textContent = palettes[palette].name;
+          // Close menu
+          dropdownMenu.classList.remove('open');
+        });
+      });
+    }
+
+    // === INTERSECTION OBSERVER — sync bottom-nav and nav-rail on scroll ===
+    const sections = document.querySelectorAll('.section[id]');
+    const observerOptions = { rootMargin: '-80px 0px -60% 0px', threshold: 0 };
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          document.querySelectorAll('.bottom-nav-item').forEach(i => {
+            i.classList.toggle('bottom-nav-item--active', i.dataset.section === id);
+          });
+          document.querySelectorAll('.nav-rail-item').forEach(i => {
+            i.classList.toggle('nav-rail-item--active', i.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, observerOptions);
+    sections.forEach(s => sectionObserver.observe(s));
+
     init();
   </script>
+
+  <!-- BOTTOM NAVIGATION -->
+  <nav class="bottom-nav">
+    <a href="#colors" class="bottom-nav-item bottom-nav-item--active" data-section="colors">
+      <div class="bottom-nav-indicator"></div>
+      <span class="bottom-nav-icon">🎨</span>
+      <span class="bottom-nav-label">Colors</span>
+    </a>
+    <a href="#typography" class="bottom-nav-item" data-section="typography">
+      <div class="bottom-nav-indicator"></div>
+      <span class="bottom-nav-icon">✏️</span>
+      <span class="bottom-nav-label">Type</span>
+    </a>
+    <a href="#components" class="bottom-nav-item" data-section="components">
+      <div class="bottom-nav-indicator"></div>
+      <span class="bottom-nav-icon">🧩</span>
+      <span class="bottom-nav-label">Parts</span>
+    </a>
+    <a href="#playground" class="bottom-nav-item" data-section="playground">
+      <div class="bottom-nav-indicator"></div>
+      <span class="bottom-nav-icon">🔬</span>
+      <span class="bottom-nav-label">Play</span>
+    </a>
+    <a href="#export" class="bottom-nav-item" data-section="export">
+      <div class="bottom-nav-indicator"></div>
+      <span class="bottom-nav-icon">📦</span>
+      <span class="bottom-nav-label">Export</span>
+    </a>
+  </nav>
 </body>
 </html>

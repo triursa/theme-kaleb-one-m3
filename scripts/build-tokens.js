@@ -11,6 +11,7 @@ const shape = require('../src/tokens/shape/corners');
 const motion = require('../src/tokens/motion/transitions');
 const breakpoints = require('../src/tokens/layout/breakpoints');
 const scaffold = require('../src/tokens/layout/scaffold');
+const stateLayers = require('../src/tokens/interaction/state-layers');
 
 const distDir = path.join(__dirname, '..', 'dist');
 const showcaseDir = path.join(__dirname, '..', 'showcase');
@@ -37,7 +38,7 @@ function buildTypographyCSS() {
   return css;
 }
 
-// Spacing + Shape + Motion + Elevation CSS
+// Spacing + Shape + Motion + Elevation + Breakpoints + Scaffold + State Layers CSS
 function buildUtilityCSS() {
   let css = `/* === Spacing === */\n:root {\n`;
   for (const [k, v] of Object.entries(spacing)) {
@@ -82,6 +83,39 @@ function buildUtilityCSS() {
   }
   css += `}\n\n`;
 
+  css += `/* === State Layers — Interaction Opacities (M3) === */\n:root {\n`;
+  for (const [k, v] of Object.entries(stateLayers)) {
+    css += `  --${k}: ${v};\n`;
+  }
+  css += `}\n\n`;
+
+  return css;
+}
+
+// Build state-layer utility classes for a given palette
+// These generate hover/focus/active/disabled backgrounds using color-mix()
+function buildStateLayerCSS(paletteKey) {
+  const palette = palettes[paletteKey];
+  let css = `/* === State Layer Utilities for ${palette.name} === */\n`;
+  css += `:root[data-theme="${paletteKey.replace(/([A-Z])/g, '-$1').toLowerCase()}"] {\n`;
+
+  // Component-level state layer mixins as custom properties
+  // These allow consumers to use: background-color: var(--md-sys-state-primary-hover);
+  const colorRoles = ['primary', 'secondary', 'tertiary', 'error', 'surface'];
+  const states = ['hover', 'focus', 'active', 'drag'];
+
+  for (const role of colorRoles) {
+    for (const state of states) {
+      const opacity = stateLayers[`md-sys-state-${state}-opacity`];
+      css += `  --md-sys-state-${role}-${state}: color-mix(in srgb, var(--md-sys-color-on-${role === 'surface' ? 'surface' : role}) ${opacity}, transparent);\n`;
+    }
+  }
+
+  // Disabled state (fixed opacity, no state layer animation)
+  css += `  --md-sys-state-disabled-opacity: ${stateLayers['md-sys-state-disabled-opacity']};\n`;
+  css += `  --md-sys-state-disabled-container-opacity: ${stateLayers['md-sys-state-disabled-container-opacity']};\n`;
+
+  css += `}\n\n`;
   return css;
 }
 
@@ -120,14 +154,96 @@ function buildPaletteCSS(paletteKey) {
   return css;
 }
 
+// Build a :root fallback block for a single palette (so loading just one CSS file works without data-theme)
+function buildRootFallbackCSS(paletteKey) {
+  const palette = palettes[paletteKey];
+  const roles = palette.dark ? deriveDarkTheme(palette) : deriveLightTheme(palette);
+
+  let css = `/*\n * Theme: ${palette.name} — :root fallback\n * When loaded as a single-palette file, these tokens apply without data-theme.\n * If data-theme is set, the attribute selector takes precedence (higher specificity).\n */\n`;
+  css += `:root {\n`;
+  for (const [k, v] of Object.entries(roles)) {
+    css += `  --${k}: ${v};\n`;
+  }
+  css += `}\n\n`;
+
+  // Dark theme elevation overlays for :root fallback
+  if (palette.dark) {
+    css += `:root .md-elevation-1 {\n`;
+    css += `  background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-1"]}, var(--md-sys-color-surface));\n`;
+    css += `}\n`;
+    css += `:root .md-elevation-2 {\n`;
+    css += `  background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-2"]}, var(--md-sys-color-surface));\n`;
+    css += `}\n`;
+    css += `:root .md-elevation-3 {\n`;
+    css += `  background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-3"]}, var(--md-sys-color-surface));\n`;
+    css += `}\n`;
+    css += `:root .md-elevation-4 {\n`;
+    css += `  background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-4"]}, var(--md-sys-color-surface));\n`;
+    css += `}\n`;
+    css += `:root .md-elevation-5 {\n`;
+    css += `  background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-5"]}, var(--md-sys-color-surface));\n`;
+    css += `}\n\n`;
+  }
+
+  return css;
+}
+
+// Build prefers-color-scheme fallback block (defaults to Obsidian for dark, Frost for light)
+function buildPrefersColorSchemeCSS() {
+  const obsidianRoles = deriveDarkTheme(palettes.obsidian);
+  const frostRoles = deriveLightTheme(palettes.frost);
+
+  let css = `/* === prefers-color-scheme fallback === */\n`;
+  css += `/* When no data-theme attribute is set, apply a palette based on the user's OS preference. */\n`;
+  css += `/* Obsidian (dark) for dark-mode users, Frost (light) for light-mode users. */\n\n`;
+
+  // Dark mode default
+  css += `@media (prefers-color-scheme: dark) {\n`;
+  css += `  :root:not([data-theme]) {\n`;
+  for (const [k, v] of Object.entries(obsidianRoles)) {
+    css += `    --${k}: ${v};\n`;
+  }
+  css += `  }\n`;
+  // Elevation overlays for dark fallback
+  css += `  :root:not([data-theme]) .md-elevation-1 {\n`;
+  css += `    background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-1"]}, var(--md-sys-color-surface));\n`;
+  css += `  }\n`;
+  css += `  :root:not([data-theme]) .md-elevation-2 {\n`;
+  css += `    background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-2"]}, var(--md-sys-color-surface));\n`;
+  css += `  }\n`;
+  css += `  :root:not([data-theme]) .md-elevation-3 {\n`;
+  css += `    background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-3"]}, var(--md-sys-color-surface));\n`;
+  css += `  }\n`;
+  css += `  :root:not([data-theme]) .md-elevation-4 {\n`;
+  css += `    background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-4"]}, var(--md-sys-color-surface));\n`;
+  css += `  }\n`;
+  css += `  :root:not([data-theme]) .md-elevation-5 {\n`;
+  css += `    background-color: color-mix(in srgb, var(--md-sys-color-primary) ${elevation.darkOverlays["md-sys-elevation-overlay-5"]}, var(--md-sys-color-surface));\n`;
+  css += `  }\n`;
+  css += `}\n\n`;
+
+  // Light mode default
+  css += `@media (prefers-color-scheme: light) {\n`;
+  css += `  :root:not([data-theme]) {\n`;
+  for (const [k, v] of Object.entries(frostRoles)) {
+    css += `    --${k}: ${v};\n`;
+  }
+  css += `  }\n`;
+  css += `}\n\n`;
+
+  return css;
+}
+
 // Also build a combined "all palettes" CSS
 function buildAllPalettesCSS() {
-  let css = `/*\n * theme-kaleb-one-m3 — All Palettes\n * Material Design 3 theme tokens for kaleb.one\n * \n * Usage: Set data-theme on <html> to one of:\n *   "obsidian" | "midnight-ocean" | "volcanic" | "frost"\n */\n\n`;
+  let css = `/*\n * theme-kaleb-one-m3 — All Palettes\n * Material Design 3 theme tokens for kaleb.one\n * \n * Usage: Set data-theme on <html> to one of:\n *   "obsidian" | "midnight-ocean" | "volcanic" | "frost"\n *\n * If no data-theme is set, prefers-color-scheme selects a default:\n *   Dark mode → Obsidian | Light mode → Frost\n */\n\n`;
   css += buildTypographyCSS();
   css += buildUtilityCSS();
   for (const key of Object.keys(palettes)) {
     css += buildPaletteCSS(key);
+    css += buildStateLayerCSS(key);
   }
+  css += buildPrefersColorSchemeCSS();
   return css;
 }
 
@@ -247,13 +363,15 @@ module.exports = {
 
 // --- Build all outputs ---
 
-// Build individual palette CSS files
+// Build individual palette CSS files (with :root fallback for single-palette use)
 for (const key of Object.keys(palettes)) {
   const slug = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-  let css = `/*\n * Theme: ${palettes[key].name}\n * ${palettes[key].description}\n * Source: ${palettes[key].source}\n */\n\n`;
+  let css = `/*\n * Theme: ${palettes[key].name}\n * ${palettes[key].description}\n * Source: ${palettes[key].source}\n *\n * Single-palette file: tokens apply to :root by default.\n * Override by setting data-theme="${slug}" (higher specificity).\n */\n\n`;
   css += buildTypographyCSS();
   css += buildUtilityCSS();
-  css += buildPaletteCSS(key);
+  css += buildRootFallbackCSS(key); // :root fallback — works without data-theme
+  css += buildPaletteCSS(key);     // data-theme selector — overrides :root when set
+  css += buildStateLayerCSS(key);
   fs.writeFileSync(path.join(distDir, `theme-${slug}.css`), css);
   console.log(`  ✓ dist/theme-${slug}.css`);
 }
@@ -273,6 +391,7 @@ const tokens = {
   motion,
   breakpoints,
   scaffold,
+  stateLayers,
 };
 for (const [key, palette] of Object.entries(palettes)) {
   const slug = key.replace(/([A-Z])/g, '-$1').toLowerCase();

@@ -36,7 +36,9 @@ Set the `data-theme` attribute on `<html>`:
 
 Values: `"obsidian"` | `"midnight-ocean"` | `"volcanic"` | `"frost"`
 
-**Default:** If no `data-theme` is set, use Obsidian (the primary dark palette). For single-palette CSS files, the colors apply to `:root` directly without `data-theme`.
+**Default behavior:**
+- **`theme-all.css`**: When `data-theme` is not set on `<html>`, the CSS uses `@media (prefers-color-scheme: dark)` to auto-select **Obsidian** for dark-mode users and **Frost** for light-mode users. Setting `data-theme` overrides this fallback.
+- **Single-palette files** (e.g., `theme-obsidian.css`): Include a `:root` block that applies all tokens without requiring `data-theme`. A `:root[data-theme]` block has higher specificity and overrides when set, so you can still use `data-theme` for palette switching.
 
 ### Via npm (for build-tool projects)
 
@@ -182,25 +184,26 @@ module.exports = {
 
 ## Typography Scale
 
-All palette CSS files include the full M3 typography scale. Use these CSS custom properties:
+All palette CSS files include the full M3 typography scale. Use these CSS custom properties.
+All size, tracking, and line-height values use **rem** units (base 16px) for accessibility — they respect user font-size preferences.
 
 | Token | Size | Weight | Tracking | Line Height | Use Case |
 |-------|------|--------|----------|-------------|----------|
-| `--md-sys-typescale-display-large` | 57px | 400 | -0.25px | 64px | Hero headlines |
-| `--md-sys-typescale-display-medium` | 45px | 400 | 0px | 52px | Large feature text |
-| `--md-sys-typescale-display-small` | 36px | 400 | 0px | 44px | Page titles |
-| `--md-sys-typescale-headline-large` | 32px | 400 | 0px | 40px | Section headers |
-| `--md-sys-typescale-headline-medium` | 28px | 400 | 0px | 36px | Card titles |
-| `--md-sys-typescale-headline-small` | 24px | 400 | 0px | 32px | Emphasized text |
-| `--md-sys-typescale-title-large` | 22px | 500 | 0px | 28px | List item titles |
-| `--md-sys-typescale-title-medium` | 16px | 500 | 0.15px | 24px | Card titles, tabs |
-| `--md-sys-typescale-title-small` | 14px | 500 | 0.1px | 20px | Small headers |
-| `--md-sys-typescale-body-large` | 16px | 400 | 0.5px | 24px | Primary body text |
-| `--md-sys-typescale-body-medium` | 14px | 400 | 0.25px | 20px | Default body text |
-| `--md-sys-typescale-body-small` | 12px | 400 | 0.4px | 16px | Captions, helpers |
-| `--md-sys-typescale-label-large` | 14px | 500 | 0.1px | 20px | Button text, tabs |
-| `--md-sys-typescale-label-medium` | 12px | 500 | 0.5px | 16px | Tags, chip text |
-| `--md-sys-typescale-label-small` | 11px | 500 | 0.5px | 16px | Small labels |
+| `--md-sys-typescale-display-large` | 3.5625rem | 400 | -0.01563rem | 4rem | Hero headlines |
+| `--md-sys-typescale-display-medium` | 2.8125rem | 400 | 0 | 3.25rem | Large feature text |
+| `--md-sys-typescale-display-small` | 2.25rem | 400 | 0 | 2.75rem | Page titles |
+| `--md-sys-typescale-headline-large` | 2rem | 400 | 0 | 2.5rem | Section headers |
+| `--md-sys-typescale-headline-medium` | 1.75rem | 400 | 0 | 2.25rem | Card titles |
+| `--md-sys-typescale-headline-small` | 1.5rem | 400 | 0 | 2rem | Emphasized text |
+| `--md-sys-typescale-title-large` | 1.375rem | 500 | 0 | 1.75rem | List item titles |
+| `--md-sys-typescale-title-medium` | 1rem | 500 | 0.00938rem | 1.5rem | Card titles, tabs |
+| `--md-sys-typescale-title-small` | 0.875rem | 500 | 0.00625rem | 1.25rem | Small headers |
+| `--md-sys-typescale-body-large` | 1rem | 400 | 0.03125rem | 1.5rem | Primary body text |
+| `--md-sys-typescale-body-medium` | 0.875rem | 400 | 0.01563rem | 1.25rem | Default body text |
+| `--md-sys-typescale-body-small` | 0.75rem | 400 | 0.025rem | 1rem | Captions, helpers |
+| `--md-sys-typescale-label-large` | 0.875rem | 500 | 0.00625rem | 1.25rem | Button text, tabs |
+| `--md-sys-typescale-label-medium` | 0.75rem | 500 | 0.03125rem | 1rem | Tags, chip text |
+| `--md-sys-typescale-label-small` | 0.6875rem | 500 | 0.03125rem | 1rem | Small labels |
 
 **Font families:**
 - `--md-sys-font-family-display` / `--md-sys-font-family-body`: `'Inter', 'Roboto', sans-serif`
@@ -279,6 +282,49 @@ In dark themes, Material 3 uses **tinted overlays** instead of shadow-only eleva
 
 ---
 
+## State Layers (Interaction States)
+
+M3 defines **state layer opacities** that overlay the "on" color onto the container color to produce hover, focus, active, drag, and disabled effects. The theme provides both raw opacity tokens and per-palette derived custom properties using `color-mix()`.
+
+### State Layer Opacities
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--md-sys-state-hover-opacity` | `8%` | Hover state overlay |
+| `--md-sys-state-focus-opacity` | `12%` | Focus state overlay |
+| `--md-sys-state-active-opacity` | `12%` | Active/pressed state overlay |
+| `--md-sys-state-drag-opacity` | `16%` | Drag state overlay |
+| `--md-sys-state-disabled-opacity` | `38%` | Disabled element opacity (applied to entire component) |
+| `--md-sys-state-disabled-container-opacity` | `12%` | Disabled container opacity |
+
+### Per-Palette Derived State Layers
+
+For convenience, each palette CSS generates derived custom properties of the form `--md-sys-state-{color}-{state}` using `color-mix()`:
+
+```css
+/* Example: hover state on primary button */
+--md-sys-state-primary-hover: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-hover-opacity), var(--md-sys-color-primary));
+
+/* Example: active state on surface */
+--md-sys-state-surface-active: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-active-opacity), var(--md-sys-color-surface));
+```
+
+Available `{color}` values: `primary`, `secondary`, `tertiary`, `error`, `surface`, `surface-variant`.
+Available `{state}` values: `hover`, `focus`, `active`, `drag`.
+
+**Usage in buttons and interactive elements:**
+
+```css
+/* ✅ Correct: M3 state layers */
+.button:hover { background-color: var(--md-sys-state-primary-hover); }
+.button:active { background-color: var(--md-sys-state-primary-active); }
+
+/* ❌ Avoid: filter-based brightness */
+.button:hover { filter: brightness(1.1); }
+```
+
+---
+
 ## Motion (Duration & Easing)
 
 ### Duration
@@ -315,6 +361,8 @@ In dark themes, Material 3 uses **tinted overlays** instead of shadow-only eleva
 ## Pre-built Components (components.css)
 
 When you load `components.css`, these M3 component classes are available:
+
+> **Note:** `components.css` sets `html { font-size: 100% }` to establish the rem baseline (16px). All typography and spacing tokens use rem units, so the entire component library scales correctly with user font-size preferences. The nav-rail width and search bar dimensions use `--md-sys-layout-rail-width` and other layout tokens for consistency.
 
 ### Buttons
 
@@ -515,8 +563,9 @@ For a standard M3 app layout with navigation rail:
   font-size: var(--md-sys-typescale-label-large-size);
   transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
 }
-.button:hover { filter: brightness(1.1); }
-.button:active { filter: brightness(0.95); }
+/* M3 state layers — use color-mix() derived tokens, not filter: brightness() */
+.button:hover { background-color: var(--md-sys-state-primary-hover); }
+.button:active { background-color: var(--md-sys-state-primary-active); }
 ```
 
 ### 6. Common Patterns
@@ -579,6 +628,7 @@ theme-kaleb-one/
 │   │   ├── typography/scale.js    ← Typography token definitions
 │   │   ├── spacing/grid.js        ← Spacing scale
 │   │   ├── elevation/shadows.js   ← Elevation + dark overlay percentages
+│   │   ├── interaction/state-layers.js ← M3 state layer opacities (hover, focus, active, drag, disabled)
 │   │   ├── shape/corners.js       ← Shape radii
 │   │   └── motion/transitions.js  ← Duration + easing
 │   └── components/
@@ -630,6 +680,25 @@ npm run build:site    # Build + copy showcase assets
 ```
 
 To add a new palette, edit `src/tokens/colors/palettes.js` and run `npm run build`. The build script will regenerate all CSS, JSON, and Tailwind preset files.
+
+### CI Validation
+
+A GitHub Actions workflow at `.github/workflows/validate.yml` runs on every push/PR to `main`. It validates:
+
+1. **Build succeeds** — `npm run build` completes without error.
+2. **`dist/` is in sync** — No uncommitted changes to `dist/` after a clean build.
+3. **Key tokens present** — Checks that `theme-all.css` contains essential tokens across all categories (color, typography, spacing, shape, elevation, motion, layout, state, font-family).
+4. **Typography uses rem** — Fails if any `--md-sys-typescale-*-size` token still uses `px` instead of `rem`.
+5. **`prefers-color-scheme` fallback exists** — Ensures `theme-all.css` includes the auto-dark/light fallback.
+
+### Contrast Audit
+
+All text-on-background token pairs pass **WCAG AA**. Two decorative tokens intentionally fail AA for text but are correct per M3 spec:
+
+- `outline-variant` on `surface` — used only for borders and dividers, not text.
+- `error-container` on `surface` — used only for background fills, not text.
+
+These are not accessibility violations because they are never used as foreground text colors.
 
 ---
 

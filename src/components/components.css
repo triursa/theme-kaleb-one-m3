@@ -3,12 +3,12 @@
 
 :root {
   /* Default to obsidian */
-  --transition-speed: 300ms;
-  --transition-ease: cubic-bezier(0.2, 0, 0, 1);
+  --transition-speed: var(--md-sys-motion-duration-medium2);
+  --transition-ease: var(--md-sys-motion-easing-standard);
 }
 
 html { 
-  font-size: 16px; 
+  font-size: 100%; /* Base for rem units */ 
   scroll-behavior: smooth;
 }
 
@@ -140,12 +140,64 @@ body {
   overflow: hidden;
 }
 
-.md-button:hover {
-  filter: brightness(1.1);
+/* === BUTTON INTERACTION STATES (M3 state layers) === */
+/* Each variant uses its "on" color at the state-layer opacity mixed into its container color. */
+
+.md-button--filled:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-hover-opacity), var(--md-sys-color-primary));
+}
+.md-button--filled:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-active-opacity), var(--md-sys-color-primary));
 }
 
-.md-button:active {
-  filter: brightness(0.95);
+.md-button--filled-secondary:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-hover-opacity), var(--md-sys-color-secondary));
+}
+.md-button--filled-secondary:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-active-opacity), var(--md-sys-color-secondary));
+}
+
+.md-button--filled-tertiary:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-hover-opacity), var(--md-sys-color-tertiary));
+}
+.md-button--filled-tertiary:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-active-opacity), var(--md-sys-color-tertiary));
+}
+
+.md-button--outlined:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) var(--md-sys-state-hover-opacity), transparent);
+}
+.md-button--outlined:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) var(--md-sys-state-active-opacity), transparent);
+}
+
+.md-button--tonal:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) var(--md-sys-state-hover-opacity), var(--md-sys-color-secondary-container));
+}
+.md-button--tonal:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-secondary-container) var(--md-sys-state-active-opacity), var(--md-sys-color-secondary-container));
+}
+
+.md-button--text:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) var(--md-sys-state-hover-opacity), transparent);
+}
+.md-button--text:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-primary) var(--md-sys-state-active-opacity), transparent);
+}
+
+.md-button--icon:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-hover-opacity), transparent);
+}
+.md-button--icon:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-active-opacity), transparent);
+}
+
+.md-button--fab:hover {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary-container) var(--md-sys-state-hover-opacity), var(--md-sys-color-primary-container));
+  box-shadow: var(--md-sys-elevation-4);
+}
+.md-button--fab:active {
+  background-color: color-mix(in srgb, var(--md-sys-color-on-primary-container) var(--md-sys-state-active-opacity), var(--md-sys-color-primary-container));
 }
 
 .md-button--filled {
@@ -181,8 +233,8 @@ body {
 }
 
 .md-button--icon {
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;   /* M3 spec: 40px icon button target */
+  height: 2.5rem;
   padding: 0;
   border-radius: var(--md-sys-shape-corner-full);
   background-color: transparent;
@@ -190,8 +242,8 @@ body {
 }
 
 .md-button--fab {
-  width: 56px;
-  height: 56px;
+  width: 3.5rem;   /* M3 spec: 56px FAB */
+  height: 3.5rem;
   border-radius: var(--md-sys-shape-corner-large);
   background-color: var(--md-sys-color-primary-container);
   color: var(--md-sys-color-on-primary-container);
@@ -402,7 +454,7 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 80px;
+  width: var(--md-sys-layout-rail-width);
   background-color: var(--md-sys-color-surface);
   border-right: 1px solid var(--md-sys-color-outline-variant);
   display: flex;
@@ -450,8 +502,8 @@ body {
 }
 
 /* Shift main content for nav rail */
-.app-bar { margin-left: 80px; }
-.main-content { margin-left: 80px; }
+.app-bar { margin-left: var(--md-sys-layout-rail-width); }
+.main-content { margin-left: var(--md-sys-layout-rail-width); }
 
 /* === PILL TOGGLE === */
 .toggle-group {
@@ -851,15 +903,15 @@ body {
 .md-search-bar--contained {
   display: flex;
   align-items: center;
-  height: 56px;
-  padding: 0 24px;
+  height: var(--md-sys-layout-bar-height);
+  padding: 0 var(--md-sys-spacing-6);
   background-color: var(--md-sys-color-surface-container-high);
   border-radius: var(--md-sys-shape-corner-full);
   border: none;
-  gap: 16px;
+  gap: var(--md-sys-spacing-4);
   transition: background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
               box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
-  min-width: 360px;
+  min-width: var(--md-sys-layout-pane-min-width);
   max-width: 720px;
   width: 100%;
 }
@@ -926,7 +978,7 @@ body {
   border-radius: var(--md-sys-shape-corner-extra-large);
   box-shadow: var(--md-sys-elevation-2);
   overflow: hidden;
-  min-height: 240px;
+  min-height: 15rem; /* M3 spec: ~240px */
 }
 
 .md-search-view__results {

@@ -1,0 +1,86 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm install --ignore-scripts
+
+      - name: Build tokens
+        run: npm run build
+
+      - name: Verify dist/ is up to date
+        run: |
+          git diff --exit-code -- dist/
+          if [ $? -ne 0 ]; then
+            echo "::error::dist/ is out of date. Run 'npm run build' and commit the changes."
+            git diff -- dist/
+            exit 1
+          fi
+
+      - name: Validate CSS custom properties
+        run: |
+          echo "Checking theme-all.css for expected tokens..."
+          CSS="dist/theme-all.css"
+
+          # Check for key tokens across categories
+          for token in \
+            "md-sys-color-primary" \
+            "md-sys-color-surface" \
+            "md-sys-color-on-surface" \
+            "md-sys-typescale-body-medium-size" \
+            "md-sys-spacing-4" \
+            "md-sys-shape-corner-medium" \
+            "md-sys-elevation-1" \
+            "md-sys-motion-duration-medium2" \
+            "md-sys-motion-easing-standard" \
+            "md-sys-breakpoint-medium" \
+            "md-sys-layout-rail-width" \
+            "md-sys-state-hover-opacity" \
+            "md-sys-font-family-display"; do
+            if ! grep -q "\-\-$token:" "$CSS"; then
+              echo "::error::Missing token: --$token"
+              exit 1
+            fi
+          done
+
+          echo "Checking for prefers-color-scheme fallback..."
+          if ! grep -q "prefers-color-scheme" "$CSS"; then
+            echo "::error::Missing prefers-color-scheme fallback"
+            exit 1
+          fi
+
+          echo "Checking for data-theme selectors..."
+          for theme in obsidian midnight-ocean volcanic frost; do
+            if ! grep -q "data-theme=\"$theme\"" "$CSS"; then
+              echo "::error::Missing data-theme selector for: $theme"
+              exit 1
+            fi
+          done
+
+          echo "All token validations passed ✓"
+
+      - name: Check typography uses rem
+        run: |
+          echo "Checking typography tokens use rem units..."
+          if grep -E "\-\-md-sys-typescale-.*-size:.*px" dist/theme-all.css; then
+            echo "::error::Typography size tokens still use px instead of rem"
+            exit 1
+          fi
+          echo "Typography uses rem ✓"

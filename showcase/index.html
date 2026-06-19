@@ -78,8 +78,8 @@
     }
     .palette-btn:hover { background-color: var(--md-sys-color-surface-container-high); }
     .palette-btn--active {
-      background-color: var(--md-sys-color-secondary-container);
-      color: var(--md-sys-color-on-secondary-container);
+      background-color: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
       border-color: transparent;
     }
     .palette-swatch {
@@ -157,16 +157,33 @@
     }
 
     /* === TOKEN INSPECTOR PANEL === */
+    /* Mobile-first: bottom sheet */
     .inspector-overlay {
-      position: fixed; top: 0; right: 0; bottom: 0; width: 360px;
+      position: fixed; top: auto; bottom: 0; left: 0; right: 0;
+      width: 100%; height: 70vh;
       background-color: var(--md-sys-color-surface-container);
-      border-left: 1px solid var(--md-sys-color-outline-variant);
-      z-index: 200; transform: translateX(100%);
+      border-top: 1px solid var(--md-sys-color-outline-variant);
+      border-left: none;
+      z-index: 200;
+      transform: translateY(100%);
       transition: transform var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized);
       display: flex; flex-direction: column;
-      box-shadow: var(--md-sys-elevation-4);
+      border-radius: var(--md-sys-shape-corner-extra-large) var(--md-sys-shape-corner-extra-large) 0 0;
+      box-shadow: var(--md-sys-elevation-4, 0 8px 24px rgba(0,0,0,.4));
+      pointer-events: none;
+      visibility: hidden;
     }
-    .inspector-overlay.open { transform: translateX(0); }
+    .inspector-overlay.open {
+      transform: translateY(0);
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .inspector-handle {
+      width: 32px; height: 4px;
+      border-radius: 2px;
+      background-color: var(--md-sys-color-outline-variant);
+      margin: var(--md-sys-spacing-2) auto var(--md-sys-spacing-1);
+    }
     .inspector-header {
       display: flex; justify-content: space-between; align-items: center;
       padding: var(--md-sys-spacing-4);
@@ -176,7 +193,7 @@
       font-size: var(--md-sys-typescale-title-medium-size);
       font-weight: var(--md-sys-typescale-title-medium-weight);
     }
-    .inspector-body { flex: 1; overflow-y: auto; padding: var(--md-sys-spacing-4); }
+    .inspector-body { flex: 1; overflow-y: auto; padding: var(--md-sys-spacing-4); -webkit-overflow-scrolling: touch; }
     .inspector-token-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: var(--md-sys-spacing-2) var(--md-sys-spacing-3);
@@ -298,7 +315,6 @@
       .app-bar { left: 0; }
       .main-content { margin-left: 0; padding: 80px var(--md-sys-spacing-4); }
       .palette-switcher { flex-wrap: wrap; gap: var(--md-sys-spacing-1); }
-      .inspector-overlay { width: 100%; }
     }
     /* Medium: phone landscape / small tablet (600–839px) */
     @media (min-width: 600px) and (max-width: 839px) {
@@ -306,34 +322,48 @@
       .app-bar { left: var(--md-sys-layout-rail-width, 80px); }
       .main-content { margin-left: var(--md-sys-layout-rail-width, 80px); }
     }
-    /* Expanded: tablet (840–1199px) — default layout serves this well */
+    /* Expanded: tablet and desktop (≥ 840px) — switch inspector to side panel */
+    @media (min-width: 840px) {
+      .inspector-overlay {
+        position: fixed; top: 0; bottom: 0; left: auto; right: 0;
+        width: 360px; height: auto;
+        border-left: 1px solid var(--md-sys-color-outline-variant);
+        border-top: none;
+        border-radius: 0;
+        transform: translateX(100%);
+        box-shadow: var(--md-sys-elevation-4, -4px 0 16px rgba(0,0,0,.3));
+      }
+      .inspector-overlay.open { transform: translateX(0); }
+      .inspector-handle { display: none; }
+    }
     /* Large: desktop (1200px+) — default layout, no overrides needed */
     /* Extra-large: ultra-wide (1600px+) — default layout, no overrides needed */
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;z-index:9999;" onfocus="this.style.position='static';this.style.width='auto';this.style.height='auto';this.style.overflow='visible';" onblur="this.style.position='absolute';this.style.left='-9999px';this.style.width='1px';this.style.height='1px';this.style.overflow='hidden';">Skip to main content</a>
 
   <!-- NAV RAIL -->
   <nav class="nav-rail">
-    <a href="#colors" class="nav-rail-item nav-rail-item--active">
+    <a href="#colors" class="nav-rail-item nav-rail-item--active" aria-label="Colors">
       <div class="nav-rail-icon">🎨</div><span>Colors</span>
     </a>
-    <a href="#typography" class="nav-rail-item">
+    <a href="#typography" class="nav-rail-item" aria-label="Typography">
       <div class="nav-rail-icon">✏️</div><span>Type</span>
     </a>
-    <a href="#elevation" class="nav-rail-item">
+    <a href="#elevation" class="nav-rail-item" aria-label="Elevation">
       <div class="nav-rail-icon">📐</div><span>Elevate</span>
     </a>
-    <a href="#components" class="nav-rail-item">
+    <a href="#components" class="nav-rail-item" aria-label="Components">
       <div class="nav-rail-icon">🧩</div><span>Parts</span>
     </a>
-    <a href="#compositions" class="nav-rail-item">
+    <a href="#compositions" class="nav-rail-item" aria-label="Compositions">
       <div class="nav-rail-icon">🖼️</div><span>Layouts</span>
     </a>
-    <a href="#playground" class="nav-rail-item">
+    <a href="#playground" class="nav-rail-item" aria-label="Playground">
       <div class="nav-rail-icon">🔬</div><span>Play</span>
     </a>
-    <a href="#export" class="nav-rail-item">
+    <a href="#export" class="nav-rail-item" aria-label="Export">
       <div class="nav-rail-icon">📦</div><span>Export</span>
     </a>
   </nav>
@@ -364,6 +394,7 @@
 
   <!-- TOKEN INSPECTOR PANEL -->
   <div class="inspector-overlay" id="inspector-panel">
+    <div class="inspector-handle"></div>
     <div class="inspector-header">
       <h3>Token Inspector</h3>
       <button onclick="closeInspector()" style="background:none;border:none;color:var(--md-sys-color-on-surface-variant);cursor:pointer;font-size:20px;">✕</button>
@@ -428,16 +459,16 @@
     <section class="section" id="components">
       <h2 class="section-title">Components</h2>
 
-      <div class="tab-bar">
-        <button class="tab-item tab-item--active" data-tab="tab-buttons" onclick="switchTab(this)">Buttons</button>
-        <button class="tab-item" data-tab="tab-cards" onclick="switchTab(this)">Cards</button>
-        <button class="tab-item" data-tab="tab-inputs" onclick="switchTab(this)">Inputs</button>
-        <button class="tab-item" data-tab="tab-chips" onclick="switchTab(this)">Chips</button>
-        <button class="tab-item" data-tab="tab-feedback" onclick="switchTab(this)">Feedback</button>
-        <button class="tab-item" data-tab="tab-expressive" onclick="switchTab(this)">✨ Expressive</button>
+      <div class="tab-bar" role="tablist">
+        <button class="tab-item tab-item--active" role="tab" id="tab-btn-buttons" aria-selected="true" aria-controls="tab-buttons" data-tab="tab-buttons" onclick="switchTab(this)">Buttons</button>
+        <button class="tab-item" role="tab" id="tab-btn-cards" aria-selected="false" aria-controls="tab-cards" data-tab="tab-cards" onclick="switchTab(this)">Cards</button>
+        <button class="tab-item" role="tab" id="tab-btn-inputs" aria-selected="false" aria-controls="tab-inputs" data-tab="tab-inputs" onclick="switchTab(this)">Inputs</button>
+        <button class="tab-item" role="tab" id="tab-btn-chips" aria-selected="false" aria-controls="tab-chips" data-tab="tab-chips" onclick="switchTab(this)">Chips</button>
+        <button class="tab-item" role="tab" id="tab-btn-feedback" aria-selected="false" aria-controls="tab-feedback" data-tab="tab-feedback" onclick="switchTab(this)">Feedback</button>
+        <button class="tab-item" role="tab" id="tab-btn-expressive" aria-selected="false" aria-controls="tab-expressive" data-tab="tab-expressive" onclick="switchTab(this)">✨ Expressive</button>
       </div>
 
-      <div class="tab-panel tab-panel--active" id="tab-buttons">
+      <div class="tab-panel tab-panel--active" role="tabpanel" id="tab-buttons" aria-labelledby="tab-btn-buttons">
         <div style="margin-bottom: var(--md-sys-spacing-4);">
           <div class="type-label" style="margin-bottom: var(--md-sys-spacing-2);">Filled</div>
           <div class="button-row">
@@ -467,7 +498,7 @@
         </div>
       </div>
 
-      <div class="tab-panel" id="tab-cards">
+      <div class="tab-panel" role="tabpanel" id="tab-cards" aria-labelledby="tab-btn-cards">
         <div class="component-grid">
           <div class="md-card md-card--elevated">
             <div class="md-card-title">Elevated Card</div>
@@ -487,7 +518,7 @@
         </div>
       </div>
 
-      <div class="tab-panel" id="tab-inputs">
+      <div class="tab-panel" role="tabpanel" id="tab-inputs" aria-labelledby="tab-btn-inputs">
         <div style="max-width: 480px;">
           <div class="md-textfield"><input type="text" id="name" placeholder=" "><label for="name">Name</label></div>
           <div class="md-textfield"><input type="email" id="email" placeholder=" "><label for="email">Email</label></div>
@@ -496,7 +527,7 @@
         </div>
       </div>
 
-      <div class="tab-panel" id="tab-chips">
+      <div class="tab-panel" role="tabpanel" id="tab-chips" aria-labelledby="tab-btn-chips">
         <div class="button-row" style="gap: var(--md-sys-spacing-2); flex-wrap: wrap;">
           <span class="md-chip md-chip--assist">Assist</span>
           <span class="md-chip md-chip--filter">Filter</span>
@@ -507,11 +538,11 @@
         </div>
       </div>
 
-      <div class="tab-panel" id="tab-feedback">
+      <div class="tab-panel" role="tabpanel" id="tab-feedback" aria-labelledby="tab-btn-feedback">
         <div style="display: flex; flex-direction: column; gap: var(--md-sys-spacing-4); max-width: 560px;">
-          <div class="md-snackbar">Item archived <button class="md-button md-button--text">Undo</button></div>
-          <div class="md-dialog" style="position: relative; max-width: 100%;">
-            <div class="md-dialog-title">Delete project?</div>
+          <div class="md-snackbar" role="status" aria-live="polite">Item archived <button class="md-button md-button--text">Undo</button></div>
+          <div class="md-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title" style="position: relative; max-width: 100%;">
+            <div class="md-dialog-title" id="dialog-title">Delete project?</div>
             <div class="md-dialog-body">This will permanently remove the project and all associated data. This action cannot be undone.</div>
             <div class="md-dialog-actions">
               <button class="md-button md-button--text">Cancel</button>
@@ -522,7 +553,7 @@
       </div>
 
       <!-- EXPRESSIVE COMPONENTS (M3 I/O 2026) -->
-      <div class="tab-panel" id="tab-expressive">
+      <div class="tab-panel" role="tabpanel" id="tab-expressive" aria-labelledby="tab-btn-expressive">
         <p style="color:var(--md-sys-color-on-surface-variant);margin-bottom:var(--md-sys-spacing-4);font-size:var(--md-sys-typescale-body-medium-size);">
           New expressive components from Material Design 3 — I/O 2026. Larger shapes, rounded items, grouped menus, and contained search.
         </p>
@@ -530,7 +561,7 @@
         <!-- Expressive List -->
         <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Expressive List — Standard</div>
         <div class="md-list--expressive" style="max-width:480px;margin-bottom:var(--md-sys-spacing-6);" id="expressive-list-demo">
-          <div class="md-list-item--expressive md-list-item--selected" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive md-list-item--selected" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">📥</div>
             <div class="md-list-item-text">
               <div class="md-list-item-headline">Inbox</div>
@@ -538,7 +569,7 @@
             </div>
             <div class="md-list-item-trailing">12</div>
           </div>
-          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">📅</div>
             <div class="md-list-item-text">
               <div class="md-list-item-headline">Calendar</div>
@@ -546,7 +577,7 @@
             </div>
             <div class="md-list-item-trailing">3</div>
           </div>
-          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">📊</div>
             <div class="md-list-item-text">
               <div class="md-list-item-headline">Analytics</div>
@@ -554,7 +585,7 @@
             </div>
             <div class="md-list-item-trailing">→</div>
           </div>
-          <div class="md-list-item--expressive md-list-item--two-line" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive md-list-item--two-line" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-avatar">AK</div>
             <div class="md-list-item-text">
               <div class="md-list-item-headline">Alex Kim</div>
@@ -566,15 +597,15 @@
 
         <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Expressive List — Segmented</div>
         <div class="md-list--expressive md-list--segmented" style="max-width:480px;margin-bottom:var(--md-sys-spacing-6);">
-          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">🏠</div>
             <div class="md-list-item-text"><div class="md-list-item-headline">Home</div></div>
           </div>
-          <div class="md-list-item--expressive md-list-item--selected" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive md-list-item--selected" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">🔍</div>
             <div class="md-list-item-text"><div class="md-list-item-headline">Explore</div></div>
           </div>
-          <div class="md-list-item--expressive" onclick="toggleExpressiveList(this)">
+          <div class="md-list-item--expressive" tabindex="0" onclick="toggleExpressiveList(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleExpressiveList(this);}">
             <div class="md-list-item-icon">👤</div>
             <div class="md-list-item-text"><div class="md-list-item-headline">Profile</div></div>
           </div>
@@ -584,20 +615,20 @@
         <div class="type-label" style="margin-bottom:var(--md-sys-spacing-2);">Vertical Menu — Standard</div>
         <div style="display:flex;gap:var(--md-sys-spacing-4);flex-wrap:wrap;margin-bottom:var(--md-sys-spacing-6);">
           <div class="md-menu--vertical" id="menu-standard">
-            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+            <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this, 'menu-standard')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-standard');}">
               <div class="md-menu-item-icon">✏️</div>
               <div class="md-menu-item-text">Edit</div>
             </div>
-            <div class="md-menu-item md-menu-item--selected" onclick="selectMenuItem(this, 'menu-standard')">
+            <div class="md-menu-item md-menu-item--selected" tabindex="0" onclick="selectMenuItem(this, 'menu-standard')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-standard');}">
               <div class="md-menu-item-icon">📁</div>
               <div class="md-menu-item-text">Open</div>
             </div>
-            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+            <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this, 'menu-standard')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-standard');}">
               <div class="md-menu-item-icon">🔗</div>
               <div class="md-menu-item-text">Share</div>
               <div class="md-menu-item-trailing">⌘S</div>
             </div>
-            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-standard')">
+            <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this, 'menu-standard')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-standard');}">
               <div class="md-menu-item-icon">🗑️</div>
               <div class="md-menu-item-text">Delete</div>
             </div>
@@ -607,23 +638,23 @@
           <div class="md-menu--vertical md-menu--grouped">
             <div class="md-menu-group">
               <div class="md-menu-group-label">Actions</div>
-              <div class="md-menu-item" onclick="selectMenuItem(this)">
+              <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this);}">
                 <div class="md-menu-item-icon">✏️</div>
                 <div class="md-menu-item-text">Edit</div>
               </div>
-              <div class="md-menu-item" onclick="selectMenuItem(this)">
+              <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this);}">
                 <div class="md-menu-item-icon">📋</div>
                 <div class="md-menu-item-text">Duplicate</div>
               </div>
             </div>
             <div class="md-menu-group">
               <div class="md-menu-group-label">Share</div>
-              <div class="md-menu-item" onclick="selectMenuItem(this)">
+              <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this);}">
                 <div class="md-menu-item-icon">🔗</div>
                 <div class="md-menu-item-text">Copy link</div>
                 <div class="md-menu-item-trailing">⌘C</div>
               </div>
-              <div class="md-menu-item" onclick="selectMenuItem(this)">
+              <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this);}">
                 <div class="md-menu-item-icon">📤</div>
                 <div class="md-menu-item-text">Export</div>
               </div>
@@ -632,15 +663,15 @@
 
           <!-- Vertical Menu — Vibrant -->
           <div class="md-menu--vertical md-menu--vibrant" id="menu-vibrant">
-            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-vibrant')">
+            <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this, 'menu-vibrant')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-vibrant');}">
               <div class="md-menu-item-icon">🎵</div>
               <div class="md-menu-item-text">Play next</div>
             </div>
-            <div class="md-menu-item md-menu-item--selected" onclick="selectMenuItem(this, 'menu-vibrant')">
+            <div class="md-menu-item md-menu-item--selected" tabindex="0" onclick="selectMenuItem(this, 'menu-vibrant')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-vibrant');}">
               <div class="md-menu-item-icon">❤️</div>
               <div class="md-menu-item-text">Add to favorites</div>
             </div>
-            <div class="md-menu-item" onclick="selectMenuItem(this, 'menu-vibrant')">
+            <div class="md-menu-item" tabindex="0" onclick="selectMenuItem(this, 'menu-vibrant')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectMenuItem(this,'menu-vibrant');}">
               <div class="md-menu-item-icon">➕</div>
               <div class="md-menu-item-text">Add to playlist</div>
             </div>
@@ -816,7 +847,7 @@
       </p>
 
       <h3 class="section-subtitle">CDN (HTML / Static pages)</h3>
-      <div class="code-block" id="code-cdn"><div class="code-copy-btn" onclick="copyCode('code-cdn')">Copy</div>
+      <div class="code-block" id="code-cdn"><div class="code-copy-btn" tabindex="0" onclick="copyCode('code-cdn')" onkeydown="if(event.key==='Enter'){copyCode('code-cdn');}">Copy</div>
 &lt;!-- Load theme --&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/triursa/theme-kaleb-one@main/dist/theme-all.css"&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/triursa/theme-kaleb-one@main/dist/components.css"&gt;
@@ -831,7 +862,7 @@
       </div>
 
       <h3 class="section-subtitle">npm (Build-tool projects)</h3>
-      <div class="code-block" id="code-npm"><div class="code-copy-btn" onclick="copyCode('code-npm')">Copy</div>
+      <div class="code-block" id="code-npm"><div class="code-copy-btn" tabindex="0" onclick="copyCode('code-npm')" onkeydown="if(event.key==='Enter'){copyCode('code-npm');}">Copy</div>
 npm install @kaleb-one/theme
 
 // Import in JS:
@@ -843,7 +874,7 @@ import '@kaleb-one/theme/css/obsidian';
       </div>
 
       <h3 class="section-subtitle">Tailwind Preset</h3>
-      <div class="code-block" id="code-tailwind"><div class="code-copy-btn" onclick="copyCode('code-tailwind')">Copy</div>
+      <div class="code-block" id="code-tailwind"><div class="code-copy-btn" tabindex="0" onclick="copyCode('code-tailwind')" onkeydown="if(event.key==='Enter'){copyCode('code-tailwind');}">Copy</div>
 // tailwind.config.js
 module.exports = {
   presets: [require('@kaleb-one/theme/tailwind')],
@@ -851,7 +882,7 @@ module.exports = {
       </div>
 
       <h3 class="section-subtitle">Custom Token Values (Current Palette)</h3>
-      <div class="code-block" id="code-tokens" style="max-height:300px;overflow-y:auto;"><div class="code-copy-btn" onclick="copyCode('code-tokens')">Copy</div>
+      <div class="code-block" id="code-tokens" style="max-height:300px;overflow-y:auto;"><div class="code-copy-btn" tabindex="0" onclick="copyCode('code-tokens')" onkeydown="if(event.key==='Enter'){copyCode('code-tokens');}">Copy</div>
 Loading tokens...
       </div>
     </section>
@@ -1323,7 +1354,7 @@ Loading tokens...
         } catch(e) {}
       });
       document.getElementById('code-tokens').innerHTML =
-        `<div class="code-copy-btn" onclick="copyCode('code-tokens')">Copy</div>/* Current palette: ${palettes[document.documentElement.getAttribute('data-theme') || 'obsidian'].name} */\n${lines.join('\n')}`;
+        `<div class="code-copy-btn" tabindex="0" onclick="copyCode('code-tokens')" onkeydown="if(event.key==='Enter'){copyCode('code-tokens');}">Copy</div>/* Current palette: ${palettes[document.documentElement.getAttribute('data-theme') || 'obsidian'].name} */\n${lines.join('\n')}`;
     }
 
     // === NAV RAIL ACTIVE STATE ===

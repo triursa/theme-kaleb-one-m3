@@ -323,26 +323,30 @@
 
 /* === State Layer Utilities for Volcanic === */
 :root[data-theme="volcanic"] {
-  --md-sys-state-primary-hover: color-mix(in srgb, var(--md-sys-color-on-primary) 8%, transparent);
-  --md-sys-state-primary-focus: color-mix(in srgb, var(--md-sys-color-on-primary) 12%, transparent);
-  --md-sys-state-primary-active: color-mix(in srgb, var(--md-sys-color-on-primary) 12%, transparent);
-  --md-sys-state-primary-drag: color-mix(in srgb, var(--md-sys-color-on-primary) 16%, transparent);
-  --md-sys-state-secondary-hover: color-mix(in srgb, var(--md-sys-color-on-secondary) 8%, transparent);
-  --md-sys-state-secondary-focus: color-mix(in srgb, var(--md-sys-color-on-secondary) 12%, transparent);
-  --md-sys-state-secondary-active: color-mix(in srgb, var(--md-sys-color-on-secondary) 12%, transparent);
-  --md-sys-state-secondary-drag: color-mix(in srgb, var(--md-sys-color-on-secondary) 16%, transparent);
-  --md-sys-state-tertiary-hover: color-mix(in srgb, var(--md-sys-color-on-tertiary) 8%, transparent);
-  --md-sys-state-tertiary-focus: color-mix(in srgb, var(--md-sys-color-on-tertiary) 12%, transparent);
-  --md-sys-state-tertiary-active: color-mix(in srgb, var(--md-sys-color-on-tertiary) 12%, transparent);
-  --md-sys-state-tertiary-drag: color-mix(in srgb, var(--md-sys-color-on-tertiary) 16%, transparent);
-  --md-sys-state-error-hover: color-mix(in srgb, var(--md-sys-color-on-error) 8%, transparent);
-  --md-sys-state-error-focus: color-mix(in srgb, var(--md-sys-color-on-error) 12%, transparent);
-  --md-sys-state-error-active: color-mix(in srgb, var(--md-sys-color-on-error) 12%, transparent);
-  --md-sys-state-error-drag: color-mix(in srgb, var(--md-sys-color-on-error) 16%, transparent);
-  --md-sys-state-surface-hover: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-  --md-sys-state-surface-focus: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-  --md-sys-state-surface-active: color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
-  --md-sys-state-surface-drag: color-mix(in srgb, var(--md-sys-color-on-surface) 16%, transparent);
+  --md-sys-state-primary-hover: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-hover-opacity), var(--md-sys-color-primary));
+  --md-sys-state-primary-focus: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-focus-opacity), var(--md-sys-color-primary));
+  --md-sys-state-primary-active: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-active-opacity), var(--md-sys-color-primary));
+  --md-sys-state-primary-drag: color-mix(in srgb, var(--md-sys-color-on-primary) var(--md-sys-state-drag-opacity), var(--md-sys-color-primary));
+  --md-sys-state-secondary-hover: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-hover-opacity), var(--md-sys-color-secondary));
+  --md-sys-state-secondary-focus: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-focus-opacity), var(--md-sys-color-secondary));
+  --md-sys-state-secondary-active: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-active-opacity), var(--md-sys-color-secondary));
+  --md-sys-state-secondary-drag: color-mix(in srgb, var(--md-sys-color-on-secondary) var(--md-sys-state-drag-opacity), var(--md-sys-color-secondary));
+  --md-sys-state-tertiary-hover: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-hover-opacity), var(--md-sys-color-tertiary));
+  --md-sys-state-tertiary-focus: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-focus-opacity), var(--md-sys-color-tertiary));
+  --md-sys-state-tertiary-active: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-active-opacity), var(--md-sys-color-tertiary));
+  --md-sys-state-tertiary-drag: color-mix(in srgb, var(--md-sys-color-on-tertiary) var(--md-sys-state-drag-opacity), var(--md-sys-color-tertiary));
+  --md-sys-state-error-hover: color-mix(in srgb, var(--md-sys-color-on-error) var(--md-sys-state-hover-opacity), var(--md-sys-color-error));
+  --md-sys-state-error-focus: color-mix(in srgb, var(--md-sys-color-on-error) var(--md-sys-state-focus-opacity), var(--md-sys-color-error));
+  --md-sys-state-error-active: color-mix(in srgb, var(--md-sys-color-on-error) var(--md-sys-state-active-opacity), var(--md-sys-color-error));
+  --md-sys-state-error-drag: color-mix(in srgb, var(--md-sys-color-on-error) var(--md-sys-state-drag-opacity), var(--md-sys-color-error));
+  --md-sys-state-surface-hover: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-hover-opacity), var(--md-sys-color-surface));
+  --md-sys-state-surface-focus: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-focus-opacity), var(--md-sys-color-surface));
+  --md-sys-state-surface-active: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-active-opacity), var(--md-sys-color-surface));
+  --md-sys-state-surface-drag: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-drag-opacity), var(--md-sys-color-surface));
+  --md-sys-state-surface-variant-hover: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-hover-opacity), var(--md-sys-color-surface-variant));
+  --md-sys-state-surface-variant-focus: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-focus-opacity), var(--md-sys-color-surface-variant));
+  --md-sys-state-surface-variant-active: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-active-opacity), var(--md-sys-color-surface-variant));
+  --md-sys-state-surface-variant-drag: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-drag-opacity), var(--md-sys-color-surface-variant));
   --md-sys-state-disabled-opacity: 38%;
   --md-sys-state-disabled-container-opacity: 12%;
 }

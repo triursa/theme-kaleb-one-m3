@@ -101,13 +101,22 @@ function buildStateLayerCSS(paletteKey) {
 
   // Component-level state layer mixins as custom properties
   // These allow consumers to use: background-color: var(--md-sys-state-primary-hover);
-  const colorRoles = ['primary', 'secondary', 'tertiary', 'error', 'surface'];
+  const colorRoles = ['primary', 'secondary', 'tertiary', 'error', 'surface', 'surface-variant'];
+  const roleMapping = {
+    'primary': { on: 'on-primary', container: 'primary' },
+    'secondary': { on: 'on-secondary', container: 'secondary' },
+    'tertiary': { on: 'on-tertiary', container: 'tertiary' },
+    'error': { on: 'on-error', container: 'error' },
+    'surface': { on: 'on-surface', container: 'surface' },
+    'surface-variant': { on: 'on-surface-variant', container: 'surface-variant' },
+  };
   const states = ['hover', 'focus', 'active', 'drag'];
 
   for (const role of colorRoles) {
+    const mapping = roleMapping[role];
     for (const state of states) {
-      const opacity = stateLayers[`md-sys-state-${state}-opacity`];
-      css += `  --md-sys-state-${role}-${state}: color-mix(in srgb, var(--md-sys-color-on-${role === 'surface' ? 'surface' : role}) ${opacity}, transparent);\n`;
+      const opacityToken = `md-sys-state-${state}-opacity`;
+      css += `  --md-sys-state-${role}-${state}: color-mix(in srgb, var(--md-sys-color-${mapping.on}) var(--${opacityToken}), var(--md-sys-color-${mapping.container}));\n`;
     }
   }
 

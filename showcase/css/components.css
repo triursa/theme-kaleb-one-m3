@@ -29,7 +29,7 @@ body {
   z-index: 50;
   display: flex;
   align-items: center;
-  padding: 16px var(--md-sys-spacing-4);
+  padding: var(--md-sys-spacing-4);
   background-color: var(--md-sys-color-surface);
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
   transition: background-color var(--transition-speed) var(--transition-ease),
@@ -126,7 +126,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0 var(--md-sys-spacing-4);
-  height: 40px;
+  height: 2.5rem;
   border-radius: var(--md-sys-shape-corner-full);
   font-family: var(--md-sys-font-family-body);
   font-size: var(--md-sys-typescale-label-large-size);
@@ -198,6 +198,45 @@ body {
 }
 .md-button--fab:active {
   background-color: color-mix(in srgb, var(--md-sys-color-on-primary-container) var(--md-sys-state-active-opacity), var(--md-sys-color-primary-container));
+}
+
+/* === BUTTON DISABLED STATE === */
+.md-button:disabled,
+.md-button[disabled] {
+  opacity: var(--md-sys-state-disabled-opacity);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* === CHIP DISABLED STATE === */
+.md-chip:disabled,
+.md-chip[disabled] {
+  opacity: var(--md-sys-state-disabled-opacity);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* === FOCUS VISIBLE RING (Accessibility) === */
+.md-button:focus-visible,
+.md-chip:focus-visible,
+.md-tab:focus-visible,
+.nav-rail-item:focus-visible,
+.md-menu-item:focus-visible,
+.md-list-item:focus-visible,
+.md-list-item--expressive:focus-visible,
+.toggle-option:focus-visible,
+.palette-btn:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
+}
+
+.md-button--tonal:focus-visible {
+  outline-color: var(--md-sys-color-on-secondary-container);
+}
+
+.md-textfield input:focus-visible,
+.md-textfield textarea:focus-visible {
+  border-bottom-color: var(--md-sys-color-primary);
 }
 
 .md-button--filled {
@@ -296,7 +335,7 @@ body {
 .md-chip {
   display: inline-flex;
   align-items: center;
-  height: 32px;
+  height: 2rem;
   padding: 0 var(--md-sys-spacing-3);
   border-radius: var(--md-sys-shape-corner-small);
   font-size: var(--md-sys-typescale-label-large-size);
@@ -331,7 +370,7 @@ body {
 .md-textfield input,
 .md-textfield textarea {
   width: 100%;
-  padding: 16px var(--md-sys-spacing-4) 8px;
+  padding: var(--md-sys-spacing-4) var(--md-sys-spacing-4) var(--md-sys-spacing-2);
   background-color: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface);
   border: none;
@@ -341,11 +380,6 @@ body {
   font-size: var(--md-sys-typescale-body-large-size);
   outline: none;
   transition: border-color var(--transition-speed) var(--transition-ease);
-}
-
-.md-textfield input:focus,
-.md-textfield textarea:focus {
-  border-bottom-color: var(--md-sys-color-primary);
 }
 
 .md-textfield label {
@@ -358,7 +392,7 @@ body {
   transition: color var(--transition-speed) var(--transition-ease);
 }
 
-.md-textfield input:focus + label {
+.md-textfield input:focus-visible + label {
   color: var(--md-sys-color-primary);
 }
 
@@ -369,7 +403,7 @@ body {
 }
 
 .type-label {
-  font-size: 11px;
+  font-size: var(--md-sys-typescale-label-small-size);
   font-family: var(--md-sys-font-family-mono);
   color: var(--md-sys-color-outline);
   text-transform: uppercase;
@@ -380,7 +414,7 @@ body {
 .md-dialog-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: color-mix(in srgb, var(--md-sys-color-scrim) 40%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -391,8 +425,8 @@ body {
   background-color: var(--md-sys-color-surface-container-high);
   border-radius: var(--md-sys-shape-corner-extra-large);
   padding: var(--md-sys-spacing-6);
-  min-width: 320px;
-  max-width: 560px;
+  min-width: 20rem;
+  max-width: 35rem;
   box-shadow: var(--md-sys-elevation-3);
 }
 
@@ -471,9 +505,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: var(--md-sys-spacing-1);
   padding: var(--md-sys-spacing-1) 0;
-  width: 56px;
+  width: 3.5rem;
   border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
   cursor: pointer;
@@ -637,28 +671,13 @@ body {
 }
 
 /* === FAB === */
+/* Use .md-button--fab for base FAB styles (dimensions, colors, elevation) */
+/* .md-fab adds fixed positioning for a floating action button */
 .md-fab {
   position: fixed;
   bottom: var(--md-sys-spacing-8);
   right: var(--md-sys-spacing-8);
-  width: 56px;
-  height: 56px;
-  border-radius: var(--md-sys-shape-corner-large);
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--md-sys-elevation-3);
-  font-size: 24px;
-  transition: all var(--transition-speed) var(--transition-ease);
   z-index: 30;
-}
-
-.md-fab:hover {
-  box-shadow: var(--md-sys-elevation-4);
 }
 
 /* === RESPONSIVE — M3 I/O 2026 Breakpoints === */
@@ -703,11 +722,11 @@ body {
 .md-list-item--expressive {
   display: flex;
   align-items: center;
-  min-height: 56px;
-  padding: 10px 16px;
-  gap: 12px;
+  min-height: 3.5rem;
+  padding: 0.625rem var(--md-sys-spacing-4);
+  gap: var(--md-sys-spacing-3);
   border-radius: var(--md-sys-shape-corner-large);
-  margin: 2px 8px;
+  margin: 0.125rem var(--md-sys-spacing-2);
   transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
               color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
   cursor: pointer;
@@ -793,12 +812,12 @@ body {
 
 /* Two-line expressive list item */
 .md-list-item--expressive.md-list-item--two-line {
-  min-height: 72px;
+  min-height: 4.5rem;
 }
 
 /* Three-line expressive list item */
 .md-list-item--expressive.md-list-item--three-line {
-  min-height: 88px;
+  min-height: 5.5rem;
 }
 
 
@@ -807,19 +826,19 @@ body {
   background-color: var(--md-sys-color-surface-container-low);
   border-radius: var(--md-sys-shape-corner-large);
   padding: var(--md-sys-spacing-1);
-  min-width: 200px;
+  min-width: 12.5rem;
   box-shadow: var(--md-sys-elevation-2);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.125rem;
 }
 
 .md-menu-item {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  padding: 8px 16px;
-  gap: 12px;
+  min-height: 2.75rem;
+  padding: var(--md-sys-spacing-2) var(--md-sys-spacing-4);
+  gap: var(--md-sys-spacing-3);
   border-radius: var(--md-sys-shape-corner-small);
   cursor: pointer;
   transition: background-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard),
@@ -872,7 +891,7 @@ body {
 .md-menu--grouped .md-menu-group {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0.125rem;
 }
 
 .md-menu--grouped .md-menu-group + .md-menu-group {
@@ -880,7 +899,7 @@ body {
 }
 
 .md-menu-group-label {
-  padding: 8px 16px 4px;
+  padding: var(--md-sys-spacing-2) var(--md-sys-spacing-4) var(--md-sys-spacing-1);
   font-size: var(--md-sys-typescale-label-small-size);
   font-weight: 500;
   color: var(--md-sys-color-on-surface-variant);
@@ -912,7 +931,7 @@ body {
   transition: background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
               box-shadow var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
   min-width: var(--md-sys-layout-pane-min-width);
-  max-width: 720px;
+  max-width: 45rem;
   width: 100%;
 }
 
@@ -923,7 +942,7 @@ body {
 .md-search-bar--contained:focus-within {
   background-color: var(--md-sys-color-surface-container-highest);
   box-shadow: var(--md-sys-elevation-2);
-  padding: 0 16px; /* Tighter padding when focused */
+  padding: 0 var(--md-sys-spacing-4);
 }
 
 .md-search-bar--contained .md-search-bar__icon {
@@ -985,4 +1004,13 @@ body {
   padding: var(--md-sys-spacing-2);
   background-color: var(--md-sys-color-surface-container-low);
   border-radius: var(--md-sys-shape-corner-medium);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

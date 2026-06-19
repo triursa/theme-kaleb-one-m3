@@ -96,6 +96,8 @@ function deriveLightTheme(palette) {
     "md-sys-color-scrim": palette.neutral[0],
     // Shadow
     "md-sys-color-shadow": palette.neutral[0],
+    // Elevation
+    "md-sys-color-elevation": "transparent",
   };
 }
 

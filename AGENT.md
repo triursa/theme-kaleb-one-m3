@@ -117,9 +117,14 @@ module.exports = {
 | `--md-sys-color-surface-container-highest` | `#31383F` | Highest container (filled cards) |
 | `--md-sys-color-outline` | `#8F97A3` | Borders, dividers, outlines |
 | `--md-sys-color-outline-variant` | `#454D56` | Subtle borders, disabled outlines |
+| `--md-sys-color-surface-dim` | `#11151C` | Dimmest surface |
+| `--md-sys-color-surface-bright` | `#353C44` | Brightest surface (dark theme) |
 | `--md-sys-color-inverse-surface` | `#DCE1E9` | Snackbars, inverted surfaces |
 | `--md-sys-color-inverse-on-surface` | `#1A1F26` | Text on inverted surfaces |
 | `--md-sys-color-inverse-primary` | `#506680` | Inverted primary |
+| `--md-sys-color-scrim` | `#000000` | Modal/scrim overlay |
+| `--md-sys-color-shadow` | `#000000` | Shadow color |
+| `--md-sys-color-elevation` | `transparent` | Elevation tint (dark: transparent) |
 
 ### Midnight Ocean
 
@@ -139,14 +144,27 @@ module.exports = {
 | `--md-sys-color-on-tertiary-container` | `#7CF5F2` |
 | `--md-sys-color-error` | `#FFB4AB` |
 | `--md-sys-color-on-error` | `#690005` |
+| `--md-sys-color-error-container` | `#93000A` |
+| `--md-sys-color-on-error-container` | `#FFDAD6` |
 | `--md-sys-color-surface` | `#10151E` |
 | `--md-sys-color-on-surface` | `#DDE5EE` |
+| `--md-sys-color-surface-dim` | `#10151E` |
+| `--md-sys-color-surface-bright` | `#353D4A` |
+| `--md-sys-color-surface-variant` | `#424B58` |
+| `--md-sys-color-on-surface-variant` | `#C1CAD9` |
+| `--md-sys-color-surface-container-lowest` | `#0C1118` |
 | `--md-sys-color-surface-container-low` | `#171E28` |
 | `--md-sys-color-surface-container` | `#1C232E` |
 | `--md-sys-color-surface-container-high` | `#262D38` |
 | `--md-sys-color-surface-container-highest` | `#303844` |
 | `--md-sys-color-outline` | `#8C95A4` |
 | `--md-sys-color-outline-variant` | `#424B58` |
+| `--md-sys-color-inverse-surface` | `#DDE5EE` |
+| `--md-sys-color-inverse-on-surface` | `#171E28` |
+| `--md-sys-color-inverse-primary` | `#3D5986` |
+| `--md-sys-color-scrim` | `#000000` |
+| `--md-sys-color-shadow` | `#000000` |
+| `--md-sys-color-elevation` | `transparent` |
 
 ### Volcanic
 
@@ -158,12 +176,35 @@ module.exports = {
 | `--md-sys-color-on-primary-container` | `#FFD7AD` |
 | `--md-sys-color-secondary` | `#CAC4BD` |
 | `--md-sys-color-on-secondary` | `#322F2A` |
+| `--md-sys-color-secondary-container` | `#494540` |
+| `--md-sys-color-on-secondary-container` | `#E7E0D9` |
 | `--md-sys-color-tertiary` | `#C6C8CA` |
+| `--md-sys-color-on-tertiary` | `#2F3132` |
+| `--md-sys-color-tertiary-container` | `#464849` |
+| `--md-sys-color-on-tertiary-container` | `#E2E4E6` |
+| `--md-sys-color-error` | `#FFB4AB` |
+| `--md-sys-color-on-error` | `#690005` |
+| `--md-sys-color-error-container` | `#93000A` |
+| `--md-sys-color-on-error-container` | `#FFDAD6` |
 | `--md-sys-color-surface` | `#15130F` |
 | `--md-sys-color-on-surface` | `#E5E1DA` |
+| `--md-sys-color-surface-dim` | `#15130F` |
+| `--md-sys-color-surface-bright` | `#383632` |
+| `--md-sys-color-surface-variant` | `#48443E` |
+| `--md-sys-color-on-surface-variant` | `#C7C4BD` |
+| `--md-sys-color-surface-container-lowest` | `#110F0D` |
+| `--md-sys-color-surface-container-low` | `#1C1A16` |
 | `--md-sys-color-surface-container` | `#201E1A` |
 | `--md-sys-color-surface-container-high` | `#2A2824` |
+| `--md-sys-color-surface-container-highest` | `#34322D` |
 | `--md-sys-color-outline` | `#928F88` |
+| `--md-sys-color-outline-variant` | `#48443E` |
+| `--md-sys-color-inverse-surface` | `#E5E1DA` |
+| `--md-sys-color-inverse-on-surface` | `#1C1A16` |
+| `--md-sys-color-inverse-primary` | `#76562E` |
+| `--md-sys-color-scrim` | `#000000` |
+| `--md-sys-color-shadow` | `#000000` |
+| `--md-sys-color-elevation` | `transparent` |
 
 ### Frost (light theme)
 
@@ -172,11 +213,38 @@ module.exports = {
 | `--md-sys-color-primary` | `#0064C2` |
 | `--md-sys-color-on-primary` | `#FFFFFF` |
 | `--md-sys-color-primary-container` | `#D3E3FF` |
+| `--md-sys-color-on-primary-container` | `#001B3D` |
+| `--md-sys-color-secondary` | `#5A5F71` |
+| `--md-sys-color-on-secondary` | `#FFFFFF` |
+| `--md-sys-color-secondary-container` | `#DDE4FB` |
+| `--md-sys-color-on-secondary-container` | `#171C2B` |
+| `--md-sys-color-tertiary` | `#605E78` |
+| `--md-sys-color-on-tertiary` | `#FFFFFF` |
+| `--md-sys-color-tertiary-container` | `#E7E0FF` |
+| `--md-sys-color-on-tertiary-container` | `#1C1B2E` |
+| `--md-sys-color-error` | `#BA1A1A` |
+| `--md-sys-color-on-error` | `#FFFFFF` |
+| `--md-sys-color-error-container` | `#FFDAD6` |
+| `--md-sys-color-on-error-container` | `#410002` |
 | `--md-sys-color-surface` | `#F8F8FF` |
 | `--md-sys-color-on-surface` | `#1B1B1F` |
+| `--md-sys-color-surface-dim` | `#DBDBE5` |
+| `--md-sys-color-surface-bright` | `#F8F8FF` |
+| `--md-sys-color-surface-variant` | `#E2E2EB` |
+| `--md-sys-color-on-surface-variant` | `#464752` |
+| `--md-sys-color-surface-container-lowest` | `#FFFFFF` |
+| `--md-sys-color-surface-container-low` | `#F3F3FB` |
 | `--md-sys-color-surface-container` | `#EDEDF5` |
+| `--md-sys-color-surface-container-high` | `#E8E8F2` |
+| `--md-sys-color-surface-container-highest` | `#DBDBE5` |
 | `--md-sys-color-outline` | `#767780` |
 | `--md-sys-color-outline-variant` | `#C6C6CF` |
+| `--md-sys-color-inverse-surface` | `#2E2E33` |
+| `--md-sys-color-inverse-on-surface` | `#F0F0F8` |
+| `--md-sys-color-inverse-primary` | `#A8C7FF` |
+| `--md-sys-color-scrim` | `#000000` |
+| `--md-sys-color-shadow` | `#000000` |
+| `--md-sys-color-elevation` | `transparent` |
 
 > **Note:** When using `theme-all.css`, switch palettes at runtime with `document.documentElement.setAttribute('data-theme', 'volcanic')`.
 
@@ -307,6 +375,9 @@ For convenience, each palette CSS generates derived custom properties of the for
 
 /* Example: active state on surface */
 --md-sys-state-surface-active: color-mix(in srgb, var(--md-sys-color-on-surface) var(--md-sys-state-active-opacity), var(--md-sys-color-surface));
+
+/* Example: hover state on surface-variant */
+--md-sys-state-surface-variant-hover: color-mix(in srgb, var(--md-sys-color-on-surface-variant) var(--md-sys-state-hover-opacity), var(--md-sys-color-surface-variant));
 ```
 
 Available `{color}` values: `primary`, `secondary`, `tertiary`, `error`, `surface`, `surface-variant`.
